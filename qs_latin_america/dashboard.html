@@ -1,0 +1,379 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>QS Latin America — UFF Comparison Dashboard</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Arial;
+      margin: 20px;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    h1 {
+      margin-bottom: 6px;
+    }
+
+    .controls {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .chart-card {
+      border: 1px solid #e2e2e2;
+      padding: 18px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .chart-card>div:first-child {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #333;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width:900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>QS Latin America — UFF Comparison Dashboard</h1>
+  <div class="text-muted mb-3"><strong>Developed by PGI/PLAN (UFF)</strong></div>
+
+  <div class="controls">
+    <label class="fw-bold me-2">Compare UFF with:</label>
+    <select id="compareSelect" class="form-select w-auto">
+      <option selected disabled>Select an university</option>
+    </select>
+    <button id="refreshBtn" class="btn btn-secondary">Refresh</button>
+    <span id="status" class="text-muted">Loading data...</span>
+  </div>
+
+    <div class="d-flex gap-3 align-items-end mb-3">
+        <div>
+            <label class="form-label m-0">Start</label>
+            <select id="minYear" class="form-select w-auto"></select>
+        </div>
+
+        <div>
+            <label class="form-label m-0">End</label>
+            <select id="maxYear" class="form-select w-auto"></select>
+        </div>
+
+        <div>
+            <button id="applyFilter" class="btn btn-primary">Update</button>
+        </div>
+    </div>
+
+
+    <div class="d-flex gap-3 align-items-center mb-3">
+        <span class="fw-bold">Show values:</span>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="annotationMode" id="annUFF" value="uff" checked>
+            <label class="form-check-label" for="annUFF">UFF only</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="annotationMode" id="annBoth" value="both">
+            <label class="form-check-label" for="annBoth">Both</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="annotationMode" id="annNone" value="none">
+            <label class="form-check-label" for="annNone">None</label>
+        </div>
+    </div>
+
+
+  <div id="charts" class="grid"></div>
+
+  <footer class="mt-4 text-muted">
+    <strong>Data sources — QS Latin America:</strong>
+    <ul>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2018.csv">2018</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2019.csv">2019</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2020.csv">2020</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2021.csv">2021</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2022.csv">2022</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2023.csv">2023</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2024.csv">2024</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2025.csv">2025</a>
+      </li>
+      <li><a target="_blank"
+          href="https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2026.csv">2026</a>
+      </li>
+    </ul>
+  </footer>
+
+  <script>
+    (async function () {
+
+      const urls = [
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2018.csv", year: 2018 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2019.csv", year: 2019 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2020.csv", year: 2020 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2021.csv", year: 2021 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2022.csv", year: 2022 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2023.csv", year: 2023 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2024.csv", year: 2024 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2025.csv", year: 2025 },
+        { url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_latin_america/qs_latam_universidades_brasileiras_2026.csv", year: 2026 }
+      ];
+
+      const statusEl = document.getElementById("status");
+      const compareSelect = document.getElementById("compareSelect");
+      const chartsDiv = document.getElementById("charts");
+      const minYearSelect = document.getElementById("minYear");
+      const maxYearSelect = document.getElementById("maxYear");
+
+      const uffName = "Universidade Federal Fluminense";
+
+      function parseNumber(v) {
+        if (v === null || v === undefined) return NaN;
+        const s = String(v).replace(",", ".").trim();
+        return isNaN(parseFloat(s)) ? NaN : parseFloat(s);
+      }
+
+      function pretty(str) {
+        return str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      }
+
+      
+      function isValidNumber(v) {
+        return typeof v === "number" && !isNaN(v);
+      }
+
+
+      statusEl.textContent = "Loading data...";
+
+      const texts = await Promise.all(urls.map(u => fetch(u.url).then(r => r.ok ? r.text() : "")));
+      let rows = [];
+
+      texts.forEach((txt, i) => {
+        if (!txt) return;
+        const parsed = Papa.parse(txt, { header: true, skipEmptyLines: true }).data;
+        parsed.forEach(r => {
+          const obj = {};
+          Object.keys(r).forEach(k => obj[k.trim()] = r[k]);
+          obj.Year = urls[i].year;
+          rows.push(obj);
+        });
+      });
+
+      // detect name column
+      const nameKey = "university_name";
+
+      // numericCols: detect numeric metrics (except rank)
+      // detect numeric metrics
+      let numericCols = Object.keys(rows[0]).filter(k =>
+        k !== "university_name" &&
+        k !== "location" &&
+        k !== "Year" &&
+        rows.some(r => !isNaN(parseNumber(r[k])))
+      );
+
+      // reorder: overall_score first, rank last
+      numericCols = [
+        ...numericCols.filter(c => c === "overall_score"),
+        ...numericCols.filter(c => c !== "overall_score" && c !== "rank"),
+        ...numericCols.filter(c => c === "rank")
+      ];
+
+
+      // populate names dropdown
+      const names = [...new Set(rows.map(r => r[nameKey]).filter(Boolean))].sort();
+      compareSelect.innerHTML = `<option selected disabled>Select an university</option>`;
+      names.filter(n => n !== uffName).forEach(n => compareSelect.appendChild(new Option(n, n)));
+
+      //changes in radio buttons
+      let annotationMode = "uff";
+      document.querySelectorAll('input[name="annotationMode"]').forEach(radio => {
+            radio.addEventListener("change", e => {
+                annotationMode = e.target.value;
+                render(compareSelect.value || "");
+            }
+        );
+        });
+
+
+
+      // years
+      const years = [...new Set(rows.map(r => +r.Year))].sort((a, b) => a - b);
+      years.forEach(y => { minYearSelect.add(new Option(y, y)); maxYearSelect.add(new Option(y, y)); });
+      minYearSelect.value = years[0];
+      maxYearSelect.value = years.at(-1);
+
+      statusEl.textContent = "Ready";
+
+      function render(compareTo = "") {
+        chartsDiv.innerHTML = "";
+
+        const minY = +minYearSelect.value;
+        const maxY = +maxYearSelect.value;
+        const yearRange = Array.from({ length: maxY - minY + 1 }, (_, i) => minY + i);
+        numericCols.forEach(metric => {
+
+          const card = document.createElement("div");
+          card.className = "chart-card";
+
+          const title = document.createElement("div");
+          title.innerHTML = `<strong>${pretty(metric)}</strong>`;
+
+          const plotDiv = document.createElement("div");
+          plotDiv.style.height = "300px";
+
+          card.appendChild(title);
+          card.appendChild(plotDiv);
+          chartsDiv.appendChild(card);
+
+          const uffData = rows.filter(r => r[nameKey] === uffName);
+          const cmpData = compareTo ? rows.filter(r => r[nameKey] === compareTo) : [];
+
+          const uffValues = yearRange.map(y => {
+            const d = uffData.find(e => e.Year === y);
+            return d ? parseNumber(d[metric]) : null;
+          });
+
+          const cmpValues = yearRange.map(y => {
+            const d = cmpData.find(e => e.Year === y);
+            return d ? parseNumber(d[metric]) : null;
+          });
+
+            const traces = [{
+            x: yearRange,
+            y: uffValues,
+            mode: "lines+markers",
+            name: uffName
+            }];
+
+            if (compareTo && compareTo !== "Select an university") {
+            traces.push({
+                x: yearRange,
+                y: cmpValues,
+                mode: "lines+markers",
+                name: compareTo,
+                line: { dash: "dash" }
+            });
+            }
+
+          const annotations = [];
+
+          yearRange.forEach((year, i) => {
+
+            // UFF only ou Both
+            if ((annotationMode === "uff" || annotationMode === "both") &&
+                isValidNumber(uffValues[i])) {
+
+              annotations.push({
+                x: year,
+                y: uffValues[i],
+                text: uffValues[i].toFixed(2),
+                showarrow: false,
+                font: { size: 10 },
+                yanchor: "bottom",
+                cliponaxis: false
+              });
+            }
+
+            // Both somente se houver comparação
+            if (annotationMode === "both" &&
+                compareTo &&
+                isValidNumber(cmpValues[i])) {
+
+              annotations.push({
+                x: year,
+                y: cmpValues[i],
+                text: cmpValues[i].toFixed(2),
+                showarrow: false,
+                font: { size: 10 },
+                yanchor: "bottom",
+                cliponaxis: false
+              });
+            }
+
+          });
+
+      Plotly.newPlot(plotDiv, traces, {
+        annotations,
+        margin: { t: 60, r: 40, l: 70, b: 60 },
+        xaxis: {
+          title: "Year",
+          dtick: 1,
+          tickmode: "linear",
+          automargin: true
+        },
+        yaxis: {
+          title: pretty(metric),
+          automargin: true,
+          autorange: metric === "rank" ? "reversed" : true
+        },
+        legend: {
+          orientation: "h",
+          x: 0,
+          y: 1.35,
+          xanchor: "left"
+        },
+        showlegend: true
+      }, { responsive: true });
+
+
+        });
+
+      }
+
+      render("");
+
+      compareSelect.onchange = e => render(e.target.value);
+      document.getElementById("applyFilter").onclick = () => render(compareSelect.value);
+      document.getElementById("refreshBtn").onclick = () => location.reload();
+
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+rank,name,overall_score,location,academic_reputation,citations_per_faculty,faculty_student_ratio,employer_reputation,international_student_ratio,international_faculty_ratio
+116,Universidade de São Paulo,55.5,"São Paulo, Brazil",88.3,35.2,25.2,73.3,3.7,8.9
+214,Universidade Estadual de Campinas,42.1,"Campinas, Brazil",67.5,32.7,21.1,34.5,4.3,9.9
+358,Universidade Federal do Rio de Janeiro,30.6,"Rio de Janeiro, Brazil",53.8,11.5,21.3,19.6,2,7
+439,Universidade Federal de São Paulo,26.2,"São Paulo, Brazil",11.7,10,93,5.1,1.8,5.5
+482,UNESP,24.6,"Sao Paulo, Brazil",31.2,14.7,35.5,15.5,2.2,5.9
+601-650,Pontifícia Universidade Católica do Rio de Janeiro,null,"Rio de Janeiro, Brazil",28.2,null,null,null,null,21.3
+651-700,Pontifícia Universidade Católica de São Paulo,null,"São Paulo, Brazil",null,null,51.6,19.7,null,null
+651-700,Universidade Federal de Minas Gerais,null,"Belo Horizonte, Brazil",28,null,null,null,null,null
+651-700,Universidade Federal do Rio Grande do Sul,null,"Porto Alegre, Brazil",26.3,null,null,null,null,null
+701-750,Universidade Federal de Santa Catarina,null,"Florianópolis, Brazil",17.2,null,29.6,null,null,null
+801-1000,Pontifícia Universidade Católica do Rio Grande do Sul,null,"Porto Alegre, Brazil",null,null,null,null,null,null
+801-1000,Universidade de Brasília,null,"Brasília, Brazil",22.2,null,null,null,null,null
+801-1000,Universidade do Estado do Rio de Janeiro,null,"Rio de Janeiro, Brazil",null,null,null,null,null,null
+801-1000,Universidade Estadual de Londrina,null,"Londrina, Brazil",null,null,32,null,null,null
+801-1000,Universidade Federal de São Carlos,null,"São Paulo, Brazil",null,null,24,null,null,null
+801-1000,Universidade Federal de Viçosa,null,"Viçosa, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal do Paraná,null,"Curitiba, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal de Pernambuco,null,"Recife, Brazil",null,null,28.5,null,null,null
+801-1000,Universidade Federal Fluminense,null,"Rio de Janeiro, Brazil",null,null,38.1,null,null,null
+1001+,Universidade Federal do Ceará,null,"Fortaleza, Brazil",null,null,null,null,null,null

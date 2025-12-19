@@ -1,0 +1,23 @@
+rank,overall_score,name,location,academic_reputation,citations_per_faculty,faculty_student_ratio,employer_reputation,international_student_ratio,international_faculty_ratio
+115,54.8,Universidade de São Paulo,São Paulo,88.6,38.1,20.5,67.4,3.1,8.2
+233,39.2,Universidade Estadual de Campinas,Campinas,62.3,35.6,16.5,29.6,3.7,8.8
+380,28.8,Universidade Federal do Rio de Janeiro,Rio de Janeiro,51.3,12.7,16,20.2,1.9,5.9
+420,27.1,Universidade Federal de São Paulo,São Paulo,11.4,10.8,96.9,4.6,1.7,6.2
+493,24.2,UNESP,Sao Paulo,30.8,16.2,32,16.9,2.1,5.3
+651-700,null,Pontifícia Universidade Católica do Rio de Janeiro,Rio de Janeiro,26.2,,,,,
+651-700,null,Universidade Federal de Minas Gerais,Belo Horizonte,27.7,,,,,
+701-750,null,Universidade Federal do Rio Grande do Sul,Porto Alegre,25.5,,,,,
+801-1000,null,Pontifícia Universidade Católica de São Paulo,São Paulo,,,34.8,,,
+801-1000,null,Universidade de Brasília,Brasília,21,,,,,
+801-1000,null,Universidade Federal de Santa Catarina,Florianópolis,17,,,,,
+801-1000,null,Universidade Federal de São Carlos,São Paulo,,18.5,,,,
+801-1000,null,Universidade Federal do Paraná,Curitiba,,,,,,
+801-1000,null,Universidade Federal de Pernambuco,Recife,,,25.2,,,
+1001+,null,Pontifícia Universidade Católica do Rio Grande do Sul,Porto Alegre,,,,,,
+1001+,null,Universidade do Estado do Rio de Janeiro,Rio de Janeiro,,,,,,
+1001+,null,Universidade Estadual de Londrina,Londrina,,,,,,
+1001+,null,Universidade Federal da Bahia,Salvador,,,,,,
+1001+,null,Universidade Federal de Santa Maria,Santa Maria,,,,,,
+1001+,null,Universidade Federal de Viçosa,Viçosa,,,,,,
+1001+,null,Universidade Federal do Ceará,Fortaleza,,,,,,
+1001+,null,Universidade Federal Fluminense,Rio de Janeiro,,,,,,

@@ -1,0 +1,84 @@
+rank,university_name,location,academic_reputation,papers_per_faculty,citation_per_paper,faculty_student,staff_with_phd,web_impact,international_research,employer_reputation,overall_score
+2,Universidade Estadual de Campinas,"Campinas, Brazil",100,100,87.8,52.2,100,100,99.3,99.7,98.9
+3,Universidade de São Paulo,"São Paulo, Brazil",100,100,79.1,53.7,100,100,99.9,100,98.3
+7,Universidade Federal do Rio de Janeiro,"Rio de Janeiro, Brazil",99.7,98.9,82.2,49.9,100,100,99.6,78.7,93.5
+10,UNESP,"Sao Paulo, Brazil",88.1,100,47.6,59.5,100,99.7,94.5,75.3,86
+=11,Universidade Federal de Minas Gerais,"Belo Horizonte, Brazil",93,98.6,80.3,43.1,100,98.9,99.6,57.1,85.9
+13,Pontifícia Universidade Católica do Rio de Janeiro,"Rio de Janeiro, Brazil",95.2,99.7,68.6,n/a,98.9,90.7,81.6,81.6,85.8
+14,Universidade Federal do Rio Grande do Sul,"Porto Alegre, Brazil",92.7,100,84.9,33.9,100,99.8,98.7,47.6,83.3
+18,Universidade de Brasília,"Brasília, Brazil",86.1,79.1,48.1,44.9,99.6,97.4,95.8,59.8,79.5
+22,Universidade Federal de Santa Catarina,"Florianópolis, Brazil",74.4,98.9,71.4,38.6,100,99.9,99.4,52.1,77.6
+29,Universidade Federal de São Carlos,"São Paulo, Brazil",60,99.9,80.1,58.2,100,77.5,94.3,51,74.1
+=32,Universidade Federal de São Paulo,"São Paulo, Brazil",54.5,95.5,82.2,100,82.1,80.8,99.6,40.5,73.4
+34,Universidade Federal do Paraná,"Curitiba, Brazil",59.3,96.3,53.2,65,100,94.8,99.1,50.9,73
+41,Pontifícia Universidade Católica de São Paulo,"São Paulo, Brazil",69.7,15.6,n/a,90.4,99.1,70.1,n/a,91.3,67
+45,Universidade Federal de Pernambuco,"Recife, Brazil",60.5,80.7,54.2,57,99,90.6,95.8,n/a,64.1
+47,Pontifícia Universidade Católica do Rio Grande do Sul,"Porto Alegre, Brazil",39.3,87.9,87.2,32.3,96.3,80.3,81.9,49.7,63.1
+49,Universidade do Estado do Rio de Janeiro,"Rio de Janeiro, Brazil",38.1,67.5,38.5,58.7,100,95.9,96,53,62.7
+53,Universidade Federal Fluminense,"Rio de Janeiro, Brazil",42.4,73.9,51.6,70.3,100,94.2,94.5,20.4,59.9
+55,Universidade Federal do Ceará,"Fortaleza, Brazil",33.2,87.6,83.8,49.3,93.5,91.1,100,23.8,59.3
+=66,Universidade Federal da Bahia,"Salvador, Brazil",35.9,72.8,57.2,63.6,83.8,89.9,95.6,n/a,54.7
+76,Universidade Federal de Viçosa,"Viçosa, Brazil",30.3,99.2,34.5,67,99.5,73.5,81.1,20.1,52.6
+83,Universidade Federal de Pelotas,"Pelotas, Brazil",19.7,82.6,67.2,76.9,93.5,63.5,91.8,n/a,50
+=84,Universidade Presbiteriana Mackenzie,"São Paulo, Brazil",n/a,29.3,51.5,n/a,93,58.8,85.4,72.5,49.4
+=86,Universidade Federal de Santa Maria,"Santa Maria, Brazil",30.3,88.3,40.7,52.9,98.4,73.2,80,n/a,49.1
+94,Universidade Federal de Goiás,"Goiânia, Brazil",n/a,54.5,64.7,85.4,97.2,93.8,80.2,n/a,47.9
+95,Universidade Estadual de Londrina,"Londrina, Brazil",n/a,68.8,42.1,73.3,99.2,72.1,81,n/a,47.4
+98,Universidade Federal da Paraíba,"João Pessoa, Brazil",20.4,60.8,34.3,53.3,98.6,65.5,95.8,19.5,46.9
+=99,Universidade Federal de Lavras,"Lavras, Brazil",19.9,99.7,35.2,35.8,100,56,95.2,n/a,46.4
+102,Universidade Federal do Rio Grande do Norte,"Rio Grande do Norte, Brazil",22.5,83.7,52.1,n/a,99.6,78.2,95.7,n/a,46.1
+103,Universidade Federal de Ouro Preto,"Ouro Preto, Brazil",n/a,67.6,53.9,64.1,91.5,51.9,78.2,19.5,46
+104,Universidade Estadual de Maringá,"Maringá, Brazil",n/a,87.7,43.1,80.8,88.7,70.7,80,n/a,45.9
+107,Universidade Federal de Itajubá,"Itajubá, Brazil",n/a,83.7,65.2,50.1,99.2,32.1,83.6,n/a,44.5
+=109,Universidade Federal de Juiz de Fora,"Juiz de Fora, Brazil",n/a,59.2,36.3,77.6,90.7,52.4,82.1,n/a,43.8
+=109,Universidade Federal de Uberlândia,"Uberlândia, Brazil",n/a,73.7,41,51.4,99.2,61.1,78.9,n/a,43.8
+=114,Pontifícia Universidade Católica do Paraná,"Curitiba, Brazil",21.5,41.7,60.2,n/a,75.1,64.6,83.4,27.2,42.2
+117,Universidade Tecnológica Federal do Paraná,"Curitiba, Brazil",n/a,36.4,26.1,89.7,90.9,42,83.7,n/a,41.4
+=118,Universidade Federal do Espírito Santo,"Vitória, Brazil",n/a,73.9,38.8,56.9,100,66.8,80.1,n/a,41.3
+122,Universidade Federal de Mato Grosso,"Cuiabá, Brazil",n/a,45.2,25.6,96,98.5,39.3,83.5,n/a,40.4
+126,Universidade do Vale do Rio dos Sinos,"São Leopoldo, Brazil",n/a,49,23.7,35.3,89.5,62.9,51.9,34.1,39.6
+=127,Universidade Federal de Alfenas,"Alfenas, Brazil",n/a,56.8,70.3,66.5,97.8,36.6,57.7,n/a,38.8
+=127,Universidade Federal do Pará,"Belém, Brazil",n/a,45.6,38.8,30,87.7,76.8,84.1,n/a,38.8
+=129,Pontifícia Universidade Católica de Campinas,"Campinas, Brazil",QS stars3QS Stars,33.1,27.2,n/a,36.5,86.3,36.9,28.6,38.7
+134,Universidade do Estado de Santa Catarina,"Florianópolis, Brazil",n/a,54.7,15.7,66.6,75.5,47,83.9,n/a,37.9
+138,Universidade Federal de Campina Grande,"Campina Grande, Brazil",22.3,73.6,n/a,75.8,88.8,57,28.4,n/a,37.2
+=149,Universidade Federal de São João del-Rei,"São João del Rei, Brazil",n/a,52.9,60,40.1,98.9,35.3,28.8,n/a,34.9
+151-160,Pontifícia Universidade Católica de Minas Gerais,"Belo Horizonte, Brazil",20.9,15.7,44,n/a,69.3,41.9,25.9,42.2,n/a
+151-160,Universidade Estadual de Ponta Grossa,"Ponta Grossa, Brazil",n/a,50.1,41.5,91.7,84.3,48.2,n/a,n/a,n/a
+151-160,Universidade Estadual do Norte Fluminense Darcy Ribeiro,"Campos dos Goytacazes, Brazil",n/a,99.5,19.6,51.6,100,38.4,48.8,n/a,n/a
+151-160,Universidade Federal de Sergipe,"São Christovão, Brazil",n/a,49.1,38,35.8,93.4,38.8,80.6,n/a,n/a
+161-170,Universidade do Vale do Paraíba,"São José, Brazil",n/a,96.3,52.9,66.6,59.1,27.6,55.4,n/a,n/a
+161-170,Universidade Federal de Alagoas,"Maceio, Brazil",n/a,41.4,56.6,n/a,93.6,36.6,80,n/a,n/a
+161-170,Universidade Federal de Mato Grosso do Sul,"Campo Grande, Brazil",n/a,41.8,32,61.5,93.1,47.6,56.1,n/a,n/a
+161-170,Universidade Federal do Rio Grande,"Rio Grande, Brazil",n/a,40.4,85.7,45.4,83,52.7,26,n/a,n/a
+171-180,Universidade Estadual do Oeste do Paraná,"Foz do Iguaçu, Brazil",n/a,42.8,16.5,98.2,94.8,35.5,n/a,n/a,n/a
+171-180,Universidade Federal do Triângulo Mineiro,"Uberaba, Brazil",n/a,42.3,45,88,80.1,n/a,26.3,n/a,n/a
+171-180,Universidade Federal Rural do Rio de Janeiro,"Rio de Janeiro, Brazil",n/a,72.8,22.7,39.6,100,39.9,26.4,n/a,n/a
+181-190,Universidade de Caxias do Sul,"Caxias do Sul, Brazil",n/a,50.8,75.5,n/a,71.6,42.8,27.6,n/a,n/a
+181-190,Universidade Federal do Estado do Rio de Janeiro,"Rio de Janeiro, Brazil",21.7,n/a,n/a,48.9,96.1,31.9,n/a,n/a,n/a
+191-200,Universidade Federal do Maranhão,"São Luís, Brazil",n/a,26.6,41,37,67.9,39.8,54.4,n/a,n/a
+201-250,Fundação Universidade Federal do Vale do São Francisco,"Petrolina, Brazil",n/a,34.5,34.1,60.9,70.9,n/a,25.6,n/a,n/a
+201-250,Universidade de Passo Fundo,"Passo Fundo, Brazil",n/a,31.4,33.4,n/a,61.2,46.7,25.5,n/a,n/a
+201-250,Universidade de Ribeirão Preto,"Ribeirao Preto, Brazil",n/a,26.1,54.2,32.4,70.3,n/a,n/a,n/a,n/a
+201-250,Universidade do Estado da Bahia,"Salvador, Brazil",n/a,n/a,67.7,70.1,n/a,27.8,28.4,n/a,n/a
+201-250,Universidade Estadual de Goiás,"Goiânia, Brazil",n/a,n/a,41.1,93.6,n/a,n/a,n/a,n/a,n/a
+201-250,Universidade Estadual de Montes Claros,"Montes Claros, Brazil",n/a,14.1,15.4,95.2,39.4,68.3,n/a,n/a,n/a
+201-250,Universidade Estadual do Rio Grande do Sul,"Bagé, Brazil",n/a,12.3,n/a,79,88.6,n/a,n/a,n/a,n/a
+201-250,Universidade Federal do Acre,"Rio Branco, Brazil",n/a,15.9,58.7,51.3,46,n/a,n/a,n/a,n/a
+201-250,Universidade Federal dos Vales do Jequitinhonha e Mucuri,"Teófilo Otoni, Brazil",n/a,27.8,21.8,54.4,93.4,32.6,n/a,n/a,n/a
+201-250,Universidade Luterana do Brasil,"Canoas, Brazil",n/a,23.8,57.8,n/a,26.9,n/a,n/a,22.8,n/a
+201-250,Universidade Paulista,"São Paulo, Brazil",n/a,24.3,n/a,n/a,n/a,29,29.6,53.8,n/a
+201-250,Universidade Positivo,"Curitiba, Brazil",n/a,23.4,65.2,n/a,43.5,n/a,n/a,22.6,n/a
+251-300,Universidade de Santa Cruz do Sul,"Santa Cruz do Sul, Brazil",n/a,13.9,22.5,30.1,57.9,51.3,n/a,n/a,n/a
+251-300,Universidade do Estado do Pará,"Belém, Brazil",n/a,n/a,63.9,59.4,32.1,n/a,n/a,n/a,n/a
+251-300,Universidade Estadual da Paraíba,"Campina Grande, Brazil",n/a,19.1,18,54.2,67.3,28.5,n/a,n/a,n/a
+251-300,Universidade Federal de Roraima,"Boa Vista, Brazil",n/a,n/a,n/a,58.8,54.6,n/a,n/a,n/a,n/a
+251-300,Universidade Federal do Amazonas,"Manaus, Brazil",n/a,31.8,33.2,n/a,n/a,59.4,28.7,n/a,n/a
+251-300,Universidade Regional de Blumenau,"Blumenau, Brazil",n/a,23.3,24.7,49.3,38.7,29.7,n/a,n/a,n/a
+301-400,Instituto Federal do Paraná,"Paranavaí, Brazil",n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+301-400,Senac São Paulo,"São Paulo, Brazil",n/a,n/a,n/a,48.9,n/a,28.7,n/a,n/a,n/a
+301-400,Universidade de Taubaté,"Taubaté, Brazil",n/a,27,25.2,n/a,51.9,27.7,n/a,n/a,n/a
+301-400,Universidade do Estado de Minas Gerais,"Belo Horizonte, Brazil",n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+301-400,Universidade Estadual do Maranhão,"São Luís, Brazil",n/a,n/a,n/a,58.6,37.8,n/a,n/a,n/a,n/a
+301-400,Universidade Ibirapuera,"São Paulo, Brazil",n/a,n/a,n/a,n/a,67.6,n/a,n/a,n/a,n/a
+301-400,Universidade Regional do Noroeste do Estado do Rio Grande do Sul,"Ijuí, Brazil",n/a,n/a,n/a,33.3,39.9,n/a,n/a,n/a,n/a

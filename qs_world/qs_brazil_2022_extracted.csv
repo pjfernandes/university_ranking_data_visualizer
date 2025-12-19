@@ -1,0 +1,28 @@
+nid,rank,overall_score,name,location,academic_reputation,citations_per_faculty,faculty_student_ratio,employer_reputation,international_student_ratio,international_faculty_ratio
+297422,=121,55.9,Universidade de São Paulo,São Paulo,90.1,42.3,18.8,71.3,3,2.4
+294560,219,41.3,Universidade Estadual de Campinas,Campinas,65.3,43.4,13,34.3,3.5,2.6
+297503,=369,30.3,Universidade Federal do Rio de Janeiro,Rio de Janeiro,54.5,10.2,17.9,25.1,1.8,3.1
+293558,=434,26.7,Universidade Federal de São Paulo,São Paulo,11.9,8.2,97.4,5.5,1.7,1.9
+297517,=492,24.2,UNESP,Sao Paulo,33.7,15.5,25.3,21.9,4,1.9
+297502,651-700,null,Pontifícia Universidade Católica do Rio de Janeiro,Rio de Janeiro,28.8,11,10.4,16.1,2,4.9
+296865,651-700,null,Universidade Federal de Minas Gerais,Belo Horizonte,30.1,9,14.4,9.6,2.2,3
+295200,751-800,null,Universidade Federal do Rio Grande do Sul,Porto Alegre,27.8,12.5,8.7,5,1.8,1.2
+293377,801-1000,null,Pontifícia Universidade Católica de São Paulo,São Paulo,11.8,1.2,28.1,17.3,1.4,1.8
+296866,801-1000,null,Universidade Federal de Pernambuco,Recife,12.6,3.8,23.4,3.1,1.4,1.1
+293554,801-1000,null,Universidade Federal de Santa Catarina,Florianópolis,18.7,6.9,18.6,6.3,2.2,1.6
+293556,801-1000,null,Universidade Federal de São Carlos,São Paulo,13.5,16,18.7,6.3,2,1.5
+296868,801-1000,null,Universidade Federal do Paraná,Curitiba,12.9,5,20.8,8.6,1.1,1.4
+296864,801-1000,null,Universidade de Brasília,Brasília,23.3,4.1,13.1,8.1,2.9,2.9
+293381,1001-1200,null,Pontifícia Universidade Católica do Rio Grande do Sul,Porto Alegre,7,8.5,7.8,5.3,1.5,1.7
+296852,1001-1200,null,Universidade Federal Fluminense,Rio de Janeiro,8.4,3.7,14.3,3.4,1.7,2
+296869,1001-1200,null,Universidade Federal da Bahia,Salvador,8.2,3.3,10.6,3.1,1.6,2
+293549,1001-1200,null,Universidade Federal de Juiz de Fora,Juiz de For a,3.5,3.1,35.7,3,null,null
+293553,1001-1200,null,Universidade Federal de Pelotas,Pelotas,3.5,6.1,30.9,1.4,null,null
+293561,1001-1200,null,Universidade Federal de Viçosa,Viçosa,4.9,8.5,15.8,2.4,2,1.4
+296870,1001-1200,null,Universidade Federal do Ceará,Fortaleza,6.9,5.9,13.7,3.6,1.5,1.4
+293529,1001-1200,null,Universidade do Estado do Rio de Janeiro,Rio de Janeiro,9.1,3.4,18,5.8,1.2,1.6
+293380,1201+,null,Pontifícia Universidade Católica do Paraná,Curitiba,3.6,4,4.2,3.5,1.8,1.1
+293533,1201+,null,Universidade Estadual de Londrina,Londrina,3.1,4.2,17.1,4.3,1.3,1.2
+293543,1201+,null,Universidade Federal da Paraíba,João Pessoa,3.6,3.2,14.5,3.2,1.3,1.3
+293547,1201+,null,Universidade Federal de Goiás,Goiânia,3.4,4.2,8.4,1.6,1.3,1.5
+293555,1201+,null,Universidade Federal de Santa Maria,Santa Maria,4.5,5.4,13.1,1.7,1.4,1.3

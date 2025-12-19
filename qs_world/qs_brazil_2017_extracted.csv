@@ -1,0 +1,23 @@
+rank,name,overall_score,location,academic_reputation,citations_per_faculty,faculty_student_ratio,employer_reputation,international_student_ratio,international_faculty_ratio
+120,Universidade de São Paulo,59,"São Paulo, Brazil",93.3,27,30.9,94.4,null,null
+=191,Universidade Estadual de Campinas,48,"Campinas, Brazil",70.5,33.6,null,79.2,null,null
+=321,Universidade Federal do Rio de Janeiro,35.3,"Rio de Janeiro, Brazil",61.6,null,null,null,null,null
+461-470,Universidade Federal do Rio Grande do Sul,null,"Porto Alegre, Brazil",35.2,null,null,null,null,84.8
+501-550,Pontifícia Universidade Católica do Rio de Janeiro,null,"Rio de Janeiro, Brazil",36.5,null,null,36.4,null,18.8
+501-550,UNESP,null,"Sao Paulo, Brazil",28.8,null,35.8,null,null,null
+501-550,Pontifícia Universidade Católica de São Paulo,null,"São Paulo, Brazil",null,null,55.2,45.2,null,null
+501-550,Universidade Federal de São Paulo,null,"São Paulo, Brazil",null,null,68.7,null,null,null
+551-600,Universidade Federal de Minas Gerais,null,"Belo Horizonte, Brazil",35.4,null,null,null,null,null
+601-650,Universidade de Brasília,null,"Brasília, Brazil",27.6,null,null,32.8,null,null
+651-700,Universidade Federal de São Carlos,null,"São Paulo, Brazil",null,null,37.8,null,null,null
+701+,Pontifícia Universidade Católica do Rio Grande do Sul,null,"Porto Alegre, Brazil",null,null,null,null,null,null
+701+,Universidade do Estado do Rio de Janeiro,null,"Rio de Janeiro, Brazil",null,null,44.9,null,null,null
+701+,Universidade Estadual de Londrina,null,"Londrina, Brazil",null,null,43.5,null,null,null
+701+,Universidade Federal da Bahia,null,"Salvador, Brazil",null,null,44.9,null,null,null
+701+,Universidade Federal de Santa Catarina,null,"Florianópolis, Brazil",null,null,null,null,null,null
+701+,Universidade Federal de Santa Maria,null,"Santa Maria, Brazil",null,null,null,null,null,null
+701+,Universidade Federal de Viçosa,null,"Viçosa, Brazil",null,null,35.6,null,null,null
+701+,Universidade Federal do Ceará,null,"Fortaleza, Brazil",null,null,null,null,null,null
+701+,Universidade Federal do Paraná,null,"Curitiba, Brazil",null,null,null,null,null,null
+701+,Universidade Federal de Pernambuco,null,"Recife, Brazil",null,null,null,null,null,null
+701+,Universidade Federal Fluminense,null,"Rio de Janeiro, Brazil",null,null,35.7,null,null,null

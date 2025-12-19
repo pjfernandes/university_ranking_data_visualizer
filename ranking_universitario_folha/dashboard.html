@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>RUF — UFF Comparison Dashboard</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    body {
+      font-family:'Segoe UI',Roboto,Arial;
+      margin:20px;
+      background:#f5f7fa;
+      color:#222;
+    }
+    h1 { margin-bottom:6px; }
+    .controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .chart-card {
+      background:#fff;
+      border-radius:12px;
+      padding:18px;
+      border:1px solid #e2e2e2;
+      box-shadow:0 4px 12px rgba(0,0,0,0.06);
+    }
+    footer { margin-top:18px; font-size:13px; color:#666; }
+    @media(max-width:900px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+
+<body>
+
+<h1>Ranking Universitário Folha — RUF</h1>
+<div class="text-muted mb-3"><strong>Developed by PGI/PLAN (UFF)</strong></div>
+
+<div class="controls">
+  <label class="fw-bold">Compare UFF with:</label>
+  <select id="compareSelect" class="form-select w-auto">
+    <option value="">Select an university</option>
+  </select>
+  <button id="refreshBtn" class="btn btn-secondary">Refresh</button>
+  <span id="status" class="text-muted">Loading data...</span>
+</div>
+
+<div class="d-flex gap-2 align-items-end mb-3">
+  <label>Start:
+    <select id="minYear" class="form-select w-auto"></select>
+  </label>
+  <label>End:
+    <select id="maxYear" class="form-select w-auto"></select>
+  </label>
+  <button id="applyFilter" class="btn btn-primary">Update</button>
+</div>
+
+<div class="d-flex gap-3 align-items-center mb-3">
+  <label class="fw-bold m-0">Annotations:</label>
+
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="annMode" value="uff" checked>
+    <label class="form-check-label">UFF only</label>
+  </div>
+
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="annMode" value="both">
+    <label class="form-check-label">Both universities</label>
+  </div>
+
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="annMode" value="none">
+    <label class="form-check-label">None</label>
+  </div>
+</div>
+
+<div id="charts" class="grid"></div>
+
+<footer>
+  <strong>Data sources — RUF:</strong>
+  <ul>
+    <li><a target="_blank" href="https://github.com/pjfernandes/university_ranking_data_visualizer/tree/main/ranking_universitario_folha">GitHub CSV Repository</a></li>
+  </ul>
+</footer>
+
+<script>
+(async function(){
+
+  const urls = [
+    {year:2023,url:"https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2023.csv"},
+    {year:2024,url:"https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2024.csv"},
+    {year:2025,url:"https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2025.csv"}
+  ];
+
+  const uffName = "Universidade Federal Fluminense";
+
+  const chartsDiv = document.getElementById("charts");
+  const compareSelect = document.getElementById("compareSelect");
+  const minYear = document.getElementById("minYear");
+  const maxYear = document.getElementById("maxYear");
+  const statusEl = document.getElementById("status");
+
+  let annotationMode = "uff";
+  let rows = [];
+  let nameKey = null;
+
+const parseNumber = v => {
+  if (v == null) return NaN;
+  const n = Number(String(v).trim());
+  return Number.isFinite(n) ? n : NaN;
+};
+
+  const isValid = v => typeof v==="number" && !isNaN(v);
+
+  const pretty = metric => {
+    let s = String(metric||"").replace(/[_\-]+/g," ").toLowerCase();
+    const small = new Set(["de","da","do","dos","das","e","em","no","na","nos","nas","para","com","por"]);
+    return s.split(" ").map((w,i)=> i>0 && small.has(w) ? w : w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+  };
+
+  statusEl.textContent = "Loading CSVs...";
+
+  // Use PapaParse to correctly load CSV with semicolon separator
+  const texts = await Promise.all(urls.map(u=>fetch(u.url).then(r=>r.text())));
+
+  texts.forEach((txt,i)=>{
+    Papa.parse(txt,{header:true,skipEmptyLines:true,delimiter:";"}).data.forEach(r=>{
+      const o = {};
+      Object.keys(r).forEach(k=>o[k.trim()] = r[k]);
+      o.Year = urls[i].year;
+      rows.push(o);
+    });
+  });
+
+  const keys = Object.keys(rows[0]);
+  nameKey = keys.find(k=>/universidade|institution|name/i.test(k)) || keys[0];
+
+  const numericCols = keys.filter(k =>
+    k!==nameKey && k!=="Year" &&
+    rows.some(r=>isValid(parseNumber(r[k])))
+  );
+
+  [...new Set(rows.map(r=>r[nameKey]).filter(Boolean))]
+    .filter(n=>n!==uffName)
+    .sort()
+    .forEach(n=>compareSelect.add(new Option(n,n)));
+
+  const years = [...new Set(rows.map(r=>+r.Year))].sort();
+  years.forEach(y=>{
+    minYear.add(new Option(y,y));
+    maxYear.add(new Option(y,y));
+  });
+  minYear.value = years[0];
+  maxYear.value = years.at(-1);
+
+  statusEl.textContent = "Ready";
+
+  function isRankingMetric(metric) {
+    return /ranking|posi[cç][aã]o/i.test(metric);
+    }
+
+
+  function render(compareTo=""){
+    chartsDiv.innerHTML = "";
+    const hasCmp = compareTo && compareTo!==uffName;
+
+    const yr = [];
+    for(let y=+minYear.value;y<=+maxYear.value;y++) yr.push(y);
+
+    numericCols.forEach(metric=>{
+      const card = document.createElement("div");
+      card.className="chart-card";
+
+      const title = document.createElement("div");
+      title.innerHTML = `<strong>${pretty(metric)}</strong>`;
+
+      const plot = document.createElement("div");
+      plot.style.height="320px";
+
+      card.append(title,plot);
+      chartsDiv.appendChild(card);
+
+      const uffY = yr.map(y=>{
+        const d = rows.find(r=>r[nameKey]===uffName && +r.Year===y);
+        const v = d ? parseNumber(d[metric]) : NaN;
+        return isValid(v) ? v : null;
+      });
+
+      const cmpY = hasCmp ? yr.map(y=>{
+        const d = rows.find(r=>r[nameKey]===compareTo && +r.Year===y);
+        const v = d ? parseNumber(d[metric]) : NaN;
+        return isValid(v) ? v : null;
+      }) : [];
+
+      const traces = [{
+        x: yr,
+        y: uffY,
+        mode: "lines+markers",
+        name: uffName,          
+        showlegend: true
+      }];
+      if (hasCmp) {
+        traces.push({
+          x: yr,
+          y: cmpY,
+          mode: "lines+markers",
+          name: compareTo,   
+          line: { dash: "dash" }
+        });
+      }
+
+      const annotations = [];
+      yr.forEach((y,i)=>{
+        if((annotationMode==="uff"||annotationMode==="both") && isValid(uffY[i])){
+          annotations.push({x:y,y:uffY[i],text:uffY[i].toFixed(2),showarrow:false,yanchor:"bottom",cliponaxis:false});
+        }
+        if(annotationMode==="both" && hasCmp && isValid(cmpY[i])){
+          annotations.push({x:y,y:cmpY[i],text:cmpY[i].toFixed(2),showarrow:false,yanchor:"bottom",cliponaxis:false});
+        }
+      });
+
+      Plotly.newPlot(plot,traces,{
+        annotations,
+        margin:{t:60,l:70,r:40,b:60},
+        xaxis:{title:"Year",dtick:1},
+        yaxis:{title:pretty(metric), autorange: isRankingMetric(metric) ? "reversed" : true},
+        legend:{orientation:"h",x:0,y:1.35}
+      },{responsive:true});
+    });
+  }
+
+  render();
+
+  compareSelect.onchange = e=>render(e.target.value);
+  document.getElementById("applyFilter").onclick = ()=>render(compareSelect.value);
+  document.getElementById("refreshBtn").onclick = ()=>location.reload();
+  document.querySelectorAll("input[name='annMode']").forEach(r=>{
+    r.onchange=e=>{annotationMode=e.target.value;render(compareSelect.value);}
+  });
+
+})();
+</script>
+
+</body>
+</html>

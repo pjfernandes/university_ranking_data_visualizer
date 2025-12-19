@@ -1,0 +1,23 @@
+rank,name,overall_score,location,academic_reputation,citations_per_faculty,faculty_student_ratio,employer_reputation,international_student_ratio,international_faculty_ratio
+121,Universidade de São Paulo,59.1,"São Paulo, Brazil",94.8,25.7,31.4,90.2,null,null
+=182,Universidade Estadual de Campinas,49.5,"Campinas, Brazil",76.9,30,null,73.4,null,null
+311,Universidade Federal do Rio de Janeiro,36.7,"Rio de Janeiro, Brazil",67.1,null,null,null,null,null
+491-500,UNESP,null,"Sao Paulo, Brazil",37.2,null,27.4,null,null,null
+501-550,Pontifícia Universidade Católica de São Paulo,null,"São Paulo, Brazil",null,null,55.2,41.7,null,null
+501-550,Pontifícia Universidade Católica do Rio de Janeiro,null,"Rio de Janeiro, Brazil",40.2,null,null,null,null,null
+501-550,Universidade Federal de São Paulo,null,"São Paulo, Brazil",null,null,68.5,null,null,null
+501-550,Universidade Federal do Rio Grande do Sul,null,"Porto Alegre, Brazil",35.8,null,null,null,null,44.6
+551-600,Universidade Federal de Minas Gerais,null,"Belo Horizonte, Brazil",36.9,null,null,null,null,null
+651-700,Universidade de Brasília,null,"Brasília, Brazil",28.5,null,null,null,null,null
+651-700,Universidade Federal de São Carlos,null,"São Paulo, Brazil",null,null,43.7,null,null,null
+751-800,Universidade Federal de Santa Catarina,null,"Florianópolis, Brazil",null,null,null,null,null,null
+801-1000,Pontifícia Universidade Católica do Rio Grande do Sul,null,"Porto Alegre, Brazil",null,null,null,null,null,null
+801-1000,Universidade do Estado do Rio de Janeiro,null,"Rio de Janeiro, Brazil",null,null,34,null,null,null
+801-1000,Universidade Estadual de Londrina,null,"Londrina, Brazil",null,null,54.9,null,null,null
+801-1000,Universidade Federal da Bahia,null,"Salvador, Brazil",null,null,32.1,null,null,null
+801-1000,Universidade Federal de Santa Maria,null,"Santa Maria, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal de Viçosa,null,"Viçosa, Brazil",null,null,26.6,null,null,null
+801-1000,Universidade Federal do Ceará,null,"Fortaleza, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal do Paraná,null,"Curitiba, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal de Pernambuco,null,"Recife, Brazil",null,null,null,null,null,null
+801-1000,Universidade Federal Fluminense,null,"Rio de Janeiro, Brazil",null,null,26.7,null,null,null
