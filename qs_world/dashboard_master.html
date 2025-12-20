@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UFF QS World Master Dashboard (2017-2026)</title>
+
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b0a14;
+      --bg-panel: #151422;
+      --primary: #6200ea;
+      /* Deep Purple */
+      --primary-light: #b388ff;
+      --accent: #00d6ff;
+      /* Cyan for contrast */
+      --success: #00e676;
+      --warning: #ffab00;
+      --danger: #ff1744;
+      --text-main: #eceff1;
+      --text-muted: #90a4ae;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .navbar {
+      height: 60px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 10;
+    }
+
+    .navbar h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar h1 span {
+      color: var(--primary-light);
+    }
+
+    .data-badge {
+      background: rgba(0, 214, 255, 0.1);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(0, 214, 255, 0.3);
+    }
+
+    /* Main Layout */
+    .container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      height: calc(100vh - 60px);
+    }
+
+    /* Sidebar Control Panel */
+    .sidebar {
+      background: #100f1a;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      overflow-y: auto;
+    }
+
+    .control-group h3 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .kpi-big {
+      background: linear-gradient(135deg, var(--primary) 0%, #311b92 100%);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
+    }
+
+    .kpi-big .label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .kpi-big .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 5px 0;
+    }
+
+    .kpi-big .sub {
+      font-size: 0.75rem;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .metric-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .metric-item strong {
+      color: var(--text-muted);
+    }
+
+    .metric-item span {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 60px 280px 300px auto;
+      gap: 1.2rem;
+    }
+
+    /* Grid Items */
+    .grid-header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-card {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Specific Grid Assignments */
+    .col-span-1 {
+      grid-column: span 1;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+
+    .col-span-3 {
+      grid-column: span 3;
+    }
+
+    .row-span-2 {
+      grid-row: span 2;
+    }
+
+    /* Loading */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loader">
+    <div class="spinner"></div>
+    <h3 style="margin-top: 15px; font-weight: 400;">Processando 10 anos de dados (2017-2026)...</h3>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Normalizando cabeçalhos variáveis e
+      calculando indicadores</p>
+  </div>
+
+  <nav class="navbar">
+    <h1>QS<span>Analytics</span> <small style="font-size: 0.8rem; color: var(--text-muted); margin-left: 10px;">|
+        Universidade Federal Fluminense</small></h1>
+    <span class="data-badge"><i class="fas fa-database"></i> GitHub Sync Active</span>
+  </nav>
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="control-group">
+        <h3>Resumo Atual (2026)</h3>
+        <div class="kpi-big">
+          <div class="label">Ranking Brasil</div>
+          <div class="value" id="kpi-rank">#--</div>
+          <div class="sub" id="kpi-rank-global">Global Band: ---</div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <h3>Indicadores Chave (2026)</h3>
+        <div class="metric-list" id="metrics-list">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <h3>Status da Coleta</h3>
+        <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+          <i class="fas fa-check" style="color: var(--success)"></i> Arquivos 2017-2026<br>
+          <i class="fas fa-check" style="color: var(--success)"></i> Normalização de Colunas<br>
+          <i class="fas fa-check" style="color: var(--success)"></i> Detecção Auto de UFF
+        </div>
+      </div>
+    </aside>
+
+    <main class="dashboard-content">
+
+      <div class="grid-header">
+        <h2>Visão Estratégica & Evolução</h2>
+        <select id="compareSelect"
+          style="background: var(--bg-panel); color: white; border: 1px solid #333; padding: 5px 10px; border-radius: 4px;">
+          <option value="top5">Comparar vs Top 5 Brasil</option>
+          <option value="ufrj">Comparar vs UFRJ</option>
+          <option value="national">Média Nacional</option>
+        </select>
+      </div>
+
+      <div class="chart-card col-span-2">
+        <div class="chart-title">
+          <span>Evolução Histórica dos Indicadores (2017-2026)</span>
+          <i class="fas fa-chart-line" style="color: var(--primary-light)"></i>
+        </div>
+        <div id="historyChart" style="width: 100%; height: 100%;"></div>
+      </div>
+
+      <div class="chart-card col-span-1">
+        <div class="chart-title">
+          <span>Perfil de Competência 2026</span>
+          <i class="fas fa-bullseye" style="color: var(--accent)"></i>
+        </div>
+        <div id="radarChart" style="width: 100%; height: 100%;"></div>
+      </div>
+
+      <div class="chart-card col-span-2">
+        <div class="chart-title">
+          <span>Novos Indicadores QS (Sustentabilidade & Empregabilidade)</span>
+          <i class="fas fa-leaf" style="color: var(--success)"></i>
+        </div>
+        <div id="newMetricsChart" style="width: 100%; height: 100%;"></div>
+      </div>
+
+      <div class="chart-card col-span-1">
+        <div class="chart-title">
+          <span>Diagnóstico de Gaps</span>
+          <i class="fas fa-stethoscope" style="color: var(--warning)"></i>
+        </div>
+        <div id="insightsPanel"
+          style="overflow-y: auto; font-size: 0.9rem; display: flex; flex-direction: column; gap: 10px;">
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // --- 1. CONFIGURAÇÃO DE DADOS ---
+    const baseUrl = "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/main/qs_world/";
+    const years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+    // Dicionário de Normalização: Mapeia as variações de nomes nos CSVs para uma chave única
+    const schema = {
+      name: ['institution name', 'institution', 'university', 'name', 'uni'],
+      rank: ['rank', 'rank_display', 'overall rank'],
+      score: ['overall score', 'overall', 'score', 'overall_score'],
+      ar: ['academic reputation', 'ar score', 'score_ar', 'academic_reputation'],
+      er: ['employer reputation', 'er score', 'score_er', 'employer_reputation'],
+      cpf: ['citations per faculty', 'cpf score', 'score_cpf', 'citations_per_faculty'],
+      fsr: ['faculty student', 'fsr score', 'faculty student ratio', 'score_fsr', 'faculty_student_ratio'],
+      ifr: ['international faculty', 'ifr score', 'international faculty ratio', 'score_ifr', 'international_faculty_ratio'],
+      isr: ['international students', 'isr score', 'international student ratio', 'score_isr', 'international_student_ratio'],
+      // Novos indicadores recentes
+      irn: ['international research network', 'irn score', 'international_research_network'],
+      emp: ['employment outcomes', 'ger score', 'employment_outcomes'],
+      sus: ['sustainability', 'sustainability score', 'sustainability_score']
+    };
+
+    let db = {}; // Armazena dados processados por ano
+
+    // --- 2. CARREGAMENTO E PROCESSAMENTO ---
+    document.addEventListener('DOMContentLoaded', initDashboard);
+
+    async function initDashboard() {
+      try {
+        // Carrega todos os anos em paralelo
+        const promises = years.map(y => fetchYearData(y));
+        const results = await Promise.all(promises);
+
+        results.forEach(r => { if (r) db[r.year] = r.data; });
+
+        renderDashboard();
+        document.getElementById('loader').style.display = 'none';
+
+        // Listener para mudança de benchmark
+        document.getElementById('compareSelect').addEventListener('change', () => {
+          updateCharts(db[2026], 2026);
+        });
+
+      } catch (e) {
+        console.error(e);
+        alert("Erro ao carregar dados. Veja o console.");
+      }
+    }
+
+    function fetchYearData(year) {
+      return new Promise(resolve => {
+        Papa.parse(`${baseUrl}qs_brazil_${year}_extracted.csv`, {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: (res) => {
+            const cleanData = normalizeData(res.data);
+            resolve({ year, data: cleanData });
+          },
+          error: () => resolve(null) // Continua mesmo se falhar um ano
+        });
+      });
+    }
+
+    // A mágica acontece aqui: encontra a coluna certa independente do nome no CSV
+    function normalizeData(rows) {
+      return rows.map(row => {
+        const item = {};
+
+        // Helper para buscar valor case-insensitive
+        const findVal = (keys) => {
+          for (const key of keys) {
+            const exact = row[key];
+            if (exact !== undefined) return exact;
+            // Tenta achar chave no objeto row que dê match com a key do schema
+            const roughKey = Object.keys(row).find(k => k.toLowerCase().trim().replace(/_/g, ' ') === key.toLowerCase().replace(/_/g, ' '));
+            if (roughKey) return row[roughKey];
+          }
+          return null;
+        };
+
+        item.name = findVal(schema.name);
+        if (!item.name) return null; // Linha inválida
+
+        // Parse Score (trata 'null' string)
+        let s = findVal(schema.score);
+        item.score = (s && s !== 'null' && s !== '-') ? parseFloat(s) : null;
+
+        // Parse Rank (trata faixas "1001-1200")
+        let r = findVal(schema.rank);
+        item.rankDisplay = r;
+        if (typeof r === 'string') {
+          // Pega o numero mais baixo da faixa para ordenação
+          const num = r.replace('=', '').split('-')[0].replace('+', '');
+          item.rankSort = parseInt(num) || 9999;
+        } else {
+          item.rankSort = r || 9999;
+        }
+
+        // Indicadores Numéricos
+        ['ar', 'er', 'cpf', 'fsr', 'ifr', 'isr', 'irn', 'emp', 'sus'].forEach(k => {
+          let v = findVal(schema[k]);
+          item[k] = (v && v !== 'null' && v !== '-') ? parseFloat(v) : 0;
+        });
+
+        return item;
+      }).filter(x => x !== null && x.name !== "Unknown");
+    }
+
+    // --- 3. RENDERIZAÇÃO ---
+    function renderDashboard() {
+      // Focar em 2026 inicialmente
+      const currentYear = 2026;
+      const currentData = db[currentYear];
+
+      // Encontrar UFF
+      const uff = currentData.find(d => d.name.toLowerCase().includes('fluminense'));
+
+      if (!uff) {
+        alert("UFF não encontrada nos dados de 2026.");
+        return;
+      }
+
+      // 3.1 Sidebar KPIs
+      const brRank = currentData.filter(d => d.rankSort < uff.rankSort).length + 1;
+      document.getElementById('kpi-rank').innerText = `#${brRank}`;
+      document.getElementById('kpi-rank-global').innerText = `Global: ${uff.rankDisplay}`;
+
+      // Lista de Métricas
+      const list = document.getElementById('metrics-list');
+      const metricLabels = {
+        ar: 'Reputação Acadêmica', er: 'Rep. Empregador',
+        cpf: 'Citações/Prof', sus: 'Sustentabilidade',
+        irn: 'Rede Int. de Pesquisa'
+      };
+
+      let html = '';
+      for (const [key, label] of Object.entries(metricLabels)) {
+        if (uff[key] !== undefined) {
+          // Cor baseada no valor
+          const color = uff[key] > 30 ? '#00e676' : (uff[key] > 10 ? '#ffab00' : '#ff1744');
+          html += `<div class="metric-item"><strong>${label}</strong><span style="color:${color}">${uff[key].toFixed(1)}</span></div>`;
+        }
+      }
+      list.innerHTML = html;
+
+      updateCharts(currentData, currentYear);
+    }
+
+    function updateCharts(yearData, year) {
+      const uff = yearData.find(d => d.name.toLowerCase().includes('fluminense'));
+      const benchmarkType = document.getElementById('compareSelect').value;
+      let benchmarkName = "Média";
+      let benchmarkStats = {};
+
+      // Lógica de Benchmark
+      if (benchmarkType === 'top5') {
+        benchmarkName = "Top 5 BR";
+        const top5 = yearData.sort((a, b) => a.rankSort - b.rankSort).slice(0, 5);
+        ['ar', 'er', 'cpf', 'fsr', 'irn', 'sus'].forEach(k => {
+          benchmarkStats[k] = _.meanBy(top5, k) || 0;
+        });
+      } else if (benchmarkType === 'ufrj') {
+        benchmarkName = "UFRJ";
+        const ufrj = yearData.find(d => d.name.toLowerCase().includes('rio de janeiro') && d.name.toLowerCase().includes('federal'));
+        if (ufrj) Object.assign(benchmarkStats, ufrj);
+      } else {
+        benchmarkName = "Média Nacional";
+        ['ar', 'er', 'cpf', 'fsr', 'irn', 'sus'].forEach(k => {
+          benchmarkStats[k] = _.meanBy(yearData, k) || 0;
+        });
+      }
+
+      // --- CHART 1: HISTÓRICO (Line) ---
+      // Compilar histórico da UFF
+      const historyX = [];
+      const historyAR = [];
+      const historyCPF = [];
+      const historyER = [];
+
+      years.forEach(y => {
+        if (db[y]) {
+          const u = db[y].find(d => d.name.toLowerCase().includes('fluminense'));
+          if (u) {
+            historyX.push(y);
+            historyAR.push(u.ar);
+            historyCPF.push(u.cpf);
+            historyER.push(u.er);
+          }
+        }
+      });
+
+      Plotly.newPlot('historyChart', [
+        { x: historyX, y: historyAR, name: 'Rep. Acadêmica', line: { color: '#6200ea', width: 3 } },
+        { x: historyX, y: historyCPF, name: 'Citações (Pesquisa)', line: { color: '#00d6ff', width: 3 } },
+        { x: historyX, y: historyER, name: 'Rep. Empregador', line: { color: '#ffab00', width: 2, dash: 'dot' } }
+      ], {
+        paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { color: '#90a4ae' },
+        xaxis: { gridcolor: '#333' }, yaxis: { gridcolor: '#333', title: 'Score (0-100)' },
+        margin: { t: 20, b: 40, l: 40, r: 20 }, showlegend: true, legend: { orientation: 'h', y: 1.1 }
+      }, { responsive: true });
+
+      // --- CHART 2: RADAR ---
+      const radarKeys = ['ar', 'er', 'cpf', 'fsr', 'irn', 'sus'];
+      const radarLabels = ['Acadêmico', 'Mercado', 'Citações', 'Faculty/Stu', 'Intl. Research', 'Sustentabilidade'];
+
+      const uffVals = radarKeys.map(k => uff[k] || 0);
+      const benchVals = radarKeys.map(k => benchmarkStats[k] || 0);
+
+      Plotly.newPlot('radarChart', [
+        {
+          type: 'scatterpolar', r: uffVals, theta: radarLabels, fill: 'toself', name: 'UFF',
+          line: { color: '#00d6ff' }, fillcolor: 'rgba(0, 214, 255, 0.2)'
+        },
+        {
+          type: 'scatterpolar', r: benchVals, theta: radarLabels, fill: 'toself', name: benchmarkName,
+          line: { color: '#ffffff', dash: 'dot' }, fillcolor: 'rgba(255,255,255,0.05)'
+        }
+      ], {
+        polar: {
+          radialaxis: { visible: true, range: [0, 100], gridcolor: '#444' },
+          bgcolor: 'rgba(0,0,0,0)', angularaxis: { tickfont: { size: 10, color: '#ccc' } }
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)', font: { color: '#ccc' },
+        margin: { t: 20, b: 20, l: 30, r: 30 }, showlegend: false
+      }, { responsive: true });
+
+      // --- CHART 3: NEW METRICS (Barra Horizontal) ---
+      // Focando em Sustentabilidade e International Research Network (IRN)
+      // Comparando UFF com Top 1 (USP geralmente) e Média
+      const top1 = yearData[0];
+      const metricsNew = ['sus', 'irn', 'emp'];
+      const metricsNames = ['Sustentabilidade', 'Intl Research Network', 'Resultados Emprego'];
+
+      const uffNewVals = metricsNew.map(k => uff[k] || 0);
+      const top1Vals = metricsNew.map(k => top1[k] || 0);
+
+      Plotly.newPlot('newMetricsChart', [
+        {
+          y: metricsNames, x: uffNewVals, type: 'bar', orientation: 'h', name: 'UFF',
+          marker: { color: '#6200ea' }
+        },
+        {
+          y: metricsNames, x: top1Vals, type: 'bar', orientation: 'h', name: 'Top 1 Brasil (Ref)',
+          marker: { color: '#333' }
+        }
+      ], {
+        paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { color: '#90a4ae' }, barmode: 'group',
+        xaxis: { title: 'Score', gridcolor: '#333' },
+        margin: { t: 20, b: 40, l: 120, r: 20 }, legend: { orientation: 'h', y: 1.1 }
+      }, { responsive: true });
+
+      // --- INSIGHTS ---
+      generateInsights(uff, benchmarkStats, benchmarkName);
+    }
+
+    function generateInsights(uff, bench, benchName) {
+      const panel = document.getElementById('insightsPanel');
+      panel.innerHTML = "";
+
+      const addMsg = (icon, color, title, text) => {
+        panel.innerHTML += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-left: 3px solid ${color}; border-radius: 4px;">
+                        <div style="font-weight: 600; color: ${color}; margin-bottom: 4px;"><i class="fas ${icon}"></i> ${title}</div>
+                        <div style="opacity: 0.8; font-size: 0.85rem;">${text}</div>
+                    </div>
+                `;
+      };
+
+      // 1. Sustentabilidade (Novo indicador forte)
+      if (uff.sus > 0) {
+        const diffSus = uff.sus - bench.sus;
+        if (diffSus > -5) addMsg('fa-leaf', '#00e676', 'Potencial em ESG', `A UFF apresenta score de Sustentabilidade (${uff.sus}) competitivo, próximo ou acima da ${benchName}.`);
+        else addMsg('fa-leaf', '#ffab00', 'Atenção em Sustentabilidade', `Indicador recente onde a UFF (${uff.sus}) tem espaço para crescer comparado ao benchmark.`);
+      }
+
+      // 2. Pesquisa (CPF)
+      const diffCPF = uff.cpf - bench.cpf;
+      if (diffCPF > 0) addMsg('fa-book', '#00d6ff', 'Força em Pesquisa', `Citações por Faculdade acima da ${benchName}. Indica alta produtividade científica.`);
+      else addMsg('fa-exclamation-triangle', '#ff1744', 'Volume de Citações', `Ponto crítico: a intensidade de pesquisa medida por citações está abaixo do esperado para o grupo.`);
+
+      // 3. Rede Internacional (IRN)
+      if (uff.irn && uff.irn < 50) {
+        addMsg('fa-globe', '#ffab00', 'Internacionalização', `O IRN (International Research Network) está baixo (${uff.irn}). Expandir co-autorias internacionais é o caminho mais rápido para subir no ranking.`);
+      }
+    }
+
+  </script>
+</body>
+
+</html>

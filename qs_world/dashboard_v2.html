@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QS World Ranking — UFF Analytics</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #4a148c;
+      /* Deep Purple */
+      --primary-light: #7c43bd;
+      --accent-color: #e1bee7;
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      padding-bottom: 40px;
+    }
+
+    /* Header Styling */
+    .app-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 10px rgba(74, 20, 140, 0.2);
+    }
+
+    .app-header h1 {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .app-header .subtitle {
+      opacity: 0.9;
+      font-weight: 300;
+      font-size: 1.1rem;
+      margin-top: 5px;
+    }
+
+    /* Controls Section */
+    .controls-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--primary-color);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .form-select,
+    .btn {
+      border-radius: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
+    }
+
+    /* Grid & Cards */
+    .grid {
+      display: grid;
+      /* FORÇA 2 COLUNAS */
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+
+  @media(max-width: 1200px) {
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+    @media(max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-card {
+        flex-direction: column;
+      }
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .chart-card:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .chart-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fafafa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-title {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .chart-body {
+      padding: 10px;
+      flex-grow: 1;
+      position: relative;
+    }
+
+    .stats-footer {
+      background: #fdfdfd;
+      border-top: 1px solid #eee;
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      margin-left: 8px;
+    }
+
+    .badge-sig {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .badge-not-sig {
+      background-color: #f5f5f5;
+      color: #616161;
+      border: 1px solid #e0e0e0;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="app-header">
+    <div class="container-fluid px-4">
+      <h1>QS World Ranking — UFF Analytics</h1>
+      <div class="subtitle">Comparative Analysis Dashboard (2017–2026)</div>
+    </div>
+  </header>
+
+  <div class="container-fluid px-4">
+
+    <div class="controls-card">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-building"></i> Compare UFF with:</label>
+          <select id="compareSelect" class="form-select">
+            <option value="">Select an university...</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-calendar-range"></i> Period:</label>
+          <div class="input-group">
+            <select id="minYear" class="form-select"></select>
+            <span class="input-group-text bg-light text-muted">to</span>
+            <select id="maxYear" class="form-select"></select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-graph-up"></i> Visualization:</label>
+          <div class="btn-group w-100" role="group">
+            <input type="radio" class="btn-check" name="chartType" id="typeLine" value="line" checked>
+            <label class="btn btn-outline-primary" for="typeLine"><i class="bi bi-bezier2"></i> Trends</label>
+
+            <input type="radio" class="btn-check" name="chartType" id="typeBox" value="box">
+            <label class="btn btn-outline-primary" for="typeBox"><i class="bi bi-box-seam"></i> Distribution</label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-chat-left-text"></i> Data Labels:</label>
+          <div class="d-flex gap-3 mt-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annUff" value="uff" checked>
+              <label class="form-check-label" for="annUff">UFF</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annBoth" value="both">
+              <label class="form-check-label" for="annBoth">Both</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annNone" value="none">
+              <label class="form-check-label" for="annNone">Off</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div id="status" class="text-primary fw-bold small">
+            <div class="spinner-border spinner-border-sm" role="status"></div> Loading datasets...
+          </div>
+          <div>
+            <button id="refreshBtn" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-arrow-clockwise"></i>
+              Reset</button>
+            <button id="applyFilter" class="btn btn-primary px-4"><i class="bi bi-check2-circle"></i> Update
+              Dashboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="charts" class="grid"></div>
+
+    <footer>
+      <strong>Data Source:</strong> QS World University Rankings.
+      <a target="_blank" href="https://github.com/pjfernandes/university_ranking_data_visualizer/tree/main/qs_world">
+        View CSV Repository
+      </a>
+      <br>
+      Developed by PGI/PLAN (UFF).
+    </footer>
+
+  </div>
+
+  <script>
+    (async function () {
+
+      // --- Config ---
+      const urls = [
+        { y: 2017, u: "qs_brazil_2017_extracted.csv" },
+        { y: 2018, u: "qs_brazil_2018_extracted.csv" },
+        { y: 2019, u: "qs_brazil_2019_extracted.csv" },
+        { y: 2020, u: "qs_brazil_2020_extracted.csv" },
+        { y: 2021, u: "qs_brazil_2021_extracted.csv" },
+        { y: 2022, u: "qs_brazil_2022_extracted.csv" },
+        { y: 2023, u: "qs_brazil_2023_extracted.csv" },
+        { y: 2024, u: "qs_brazil_2024_extracted.csv" },
+        { y: 2025, u: "qs_brazil_2025_extracted.csv" },
+        { y: 2026, u: "qs_brazil_2026_extracted.csv" }
+      ].map(o => ({
+        year: o.y,
+        url: `https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/qs_world/${o.u}`
+      }));
+
+      const uffName = "Universidade Federal Fluminense";
+
+      // --- Globals ---
+      const chartsDiv = document.getElementById("charts");
+      const compareSelect = document.getElementById("compareSelect");
+      const minYear = document.getElementById("minYear");
+      const maxYear = document.getElementById("maxYear");
+      const statusEl = document.getElementById("status");
+
+      let annotationMode = "uff";
+      let chartType = "line";
+      let rows = [];
+
+      // --- Utils ---
+      const parseNumber = v => {
+        if (v == null) return NaN;
+        v = String(v).replace(/–/g, "-").replace(/,/g, ".");
+        const m = v.match(/-?\d+(\.\d+)?/);
+        return m ? +m[0] : NaN;
+      };
+
+      const isValid = v => typeof v === "number" && !isNaN(v);
+      const pretty = s => s.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const hasComparison = name => name && name !== uffName;
+
+      // --- Stats Logic ---
+      function calculateStatistics(sample1, sample2) {
+        const s1 = sample1.filter(isValid);
+        const s2 = sample2.filter(isValid);
+
+        if (s1.length < 3 || s2.length < 3) return { error: "Insufficient data (n<3) for test" };
+
+        const var1 = jStat.variance(s1, true);
+        const var2 = jStat.variance(s2, true);
+        const n1 = s1.length;
+        const n2 = s2.length;
+        const mean1 = jStat.mean(s1);
+        const mean2 = jStat.mean(s2);
+
+        // F-Test for Variances
+        let fStat, df1, df2;
+        if (var1 > var2) { fStat = var1 / var2; df1 = n1 - 1; df2 = n2 - 1; }
+        else { fStat = var2 / var1; df1 = n2 - 1; df2 = n1 - 1; }
+
+        const pValF = 2 * (1 - jStat.centralF.cdf(fStat, df1, df2));
+        const equalVariances = pValF > 0.05;
+
+        // T-Test
+        let pValT, tStat;
+        if (equalVariances) {
+          // Student
+          const pooledVar = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2);
+          const se = Math.sqrt(pooledVar * (1 / n1 + 1 / n2));
+          tStat = (mean1 - mean2) / se;
+          const df = n1 + n2 - 2;
+          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), df));
+        } else {
+          // Welch
+          const se = Math.sqrt(var1 / n1 + var2 / n2);
+          tStat = (mean1 - mean2) / se;
+          const num = Math.pow(var1 / n1 + var2 / n2, 2);
+          const den = (Math.pow(var1 / n1, 2) / (n1 - 1)) + (Math.pow(var2 / n2, 2) / (n2 - 1));
+          const df = num / den;
+          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), df));
+        }
+
+        return {
+          pValT: pValT,
+          significant: pValT < 0.05,
+          testUsed: equalVariances ? "Student's t-test (Equal Var)" : "Welch's t-test (Unequal Var)"
+        };
+      }
+
+      // --- Load Data ---
+      try {
+        const texts = await Promise.all(urls.map(u => fetch(u.url).then(r => r.text())));
+        texts.forEach((txt, i) => {
+          Papa.parse(txt, { header: true, skipEmptyLines: true }).data.forEach(r => {
+            const o = {};
+            Object.keys(r).forEach(k => o[k.trim().toLowerCase()] = r[k]);
+            o.year = urls[i].year;
+            rows.push(o);
+          });
+        });
+        statusEl.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Data Ready';
+      } catch (err) {
+        statusEl.innerHTML = '<span class="text-danger">Error loading data</span>';
+        console.error(err);
+        return;
+      }
+
+      const allColumns = [...new Set(rows.flatMap(r => Object.keys(r)))];
+      const numericCols = allColumns.filter(c =>
+        !["name", "year", "location", "nid"].includes(c) &&
+        rows.some(r => isValid(parseNumber(r[c])))
+      );
+      const metrics = [
+        ...numericCols.filter(c => c !== "overall_score" && c !== "rank"),
+        ...numericCols.filter(c => c === "overall_score")
+      ];
+
+      [...new Set(rows.map(r => r.name))].filter(n => n && n !== uffName)
+        .sort().forEach(n => compareSelect.add(new Option(n, n)));
+
+      const years = [...new Set(rows.map(r => r.year))].sort();
+      years.forEach(y => { minYear.add(new Option(y, y)); maxYear.add(new Option(y, y)); });
+      minYear.value = years[0];
+      maxYear.value = years.at(-1);
+
+      // --- Render ---
+      function render(compareTo = "") {
+        chartsDiv.innerHTML = "";
+        const hasCmp = hasComparison(compareTo);
+
+        // Parse years to int to perform arithmetic
+        const startY = parseInt(minYear.value, 10);
+        const endY = parseInt(maxYear.value, 10);
+
+        const yrRange = [];
+        for (let y = startY; y <= endY; y++) yrRange.push(y);
+
+        metrics.forEach(metric => {
+          const uffData = [];
+          const cmpData = [];
+          const uffTime = [];
+          const cmpTime = [];
+
+          yrRange.forEach(y => {
+            const rUff = rows.find(r => r.name === uffName && r.year === y);
+            const vUff = rUff ? parseNumber(rUff[metric]) : NaN;
+            uffTime.push({ x: y, y: isValid(vUff) ? vUff : null });
+            if (isValid(vUff)) uffData.push(vUff);
+
+            if (hasCmp) {
+              const rCmp = rows.find(r => r.name === compareTo && r.year === y);
+              const vCmp = rCmp ? parseNumber(rCmp[metric]) : NaN;
+              cmpTime.push({ x: y, y: isValid(vCmp) ? vCmp : null });
+              if (isValid(vCmp)) cmpData.push(vCmp);
+            }
+          });
+
+          // Create Card
+          const card = document.createElement("div");
+          card.className = "chart-card";
+          card.innerHTML = `<div class="chart-header"><h3 class="chart-title">${pretty(metric)}</h3></div>`;
+          const body = document.createElement("div");
+          body.className = "chart-body";
+          const plotDiv = document.createElement("div");
+          plotDiv.style.height = "350px";
+          body.appendChild(plotDiv);
+          card.appendChild(body);
+          chartsDiv.appendChild(card);
+
+          // Plot Config
+          const isRank = metric === "rank";
+
+          const yAxisConfig = {
+            title: pretty(metric),
+            automargin: true,
+            gridcolor: "#f0f0f0",
+            zerolinecolor: "#e0e0e0"
+          };
+
+          if (isRank) {
+            yAxisConfig.autorange = "reversed"; // Ranks: 1 is top
+          } else {
+            yAxisConfig.autorange = true;
+          }
+
+          // X-Axis Logic (Fixed)
+          const xAxisConfig = {
+            gridcolor: "#f0f0f0",
+            automargin: true
+          };
+
+          if (chartType === 'line') {
+            xAxisConfig.title = 'Year';
+            xAxisConfig.dtick = 1;
+            xAxisConfig.tickmode = 'linear';
+            // Force Range to prevent zoom on empty years and fix cut-off
+            xAxisConfig.range = [startY - 0.5, endY + 0.5];
+            xAxisConfig.autorange = false;
+          } else {
+            // Box Plot uses categorical x-axis
+            xAxisConfig.autorange = true;
+          }
+
+          const layout = {
+            margin: { t: 40, l: 60, r: 30, b: 40 },
+            font: { family: 'Roboto, sans-serif' },
+            yaxis: yAxisConfig,
+            xaxis: xAxisConfig,
+            showlegend: true,
+            legend: { orientation: "h", x: 0, y: 1.15 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            hovermode: 'closest'
+          };
+
+          const config = { responsive: true, displayModeBar: false };
+
+          if (chartType === "line") {
+            const traces = [{
+              x: uffTime.map(d => d.x), y: uffTime.map(d => d.y),
+              mode: "lines+markers", name: "UFF",
+              line: { color: "#4a148c", width: 3 }, marker: { size: 6 }
+            }];
+            if (hasCmp) {
+              traces.push({
+                x: cmpTime.map(d => d.x), y: cmpTime.map(d => d.y),
+                mode: "lines+markers", name: compareTo,
+                line: { color: "#ff9800", width: 3, dash: "dot" }, marker: { size: 6 }
+              });
+            }
+
+            // Add Annotations
+            const anns = [];
+            const addAnn = (arr, col) => arr.forEach(d => {
+              if (d.y !== null) anns.push({
+                x: d.x, y: d.y, text: d.y.toFixed(isRank ? 0 : 1),
+                showarrow: false, yshift: 12,
+                font: { color: col, size: 10, weight: "bold" },
+                bgcolor: "rgba(255,255,255,0.8)"
+              });
+            });
+
+            if (annotationMode === "uff" || annotationMode === "both") addAnn(uffTime, "#4a148c");
+            if (annotationMode === "both" && hasCmp) addAnn(cmpTime, "#e65100");
+            layout.annotations = anns;
+
+            Plotly.newPlot(plotDiv, traces, layout, config);
+          } else {
+            // BOX PLOT
+            const traces = [{
+              y: uffData, type: 'box', name: 'UFF',
+              marker: { color: '#4a148c' },
+              boxpoints: 'outliers',
+              line: { width: 2 }
+            }];
+            if (hasCmp) {
+              traces.push({
+                y: cmpData, type: 'box', name: compareTo,
+                marker: { color: '#ff9800' },
+                boxpoints: 'outliers',
+                line: { width: 2 }
+              });
+            }
+            Plotly.newPlot(plotDiv, traces, layout, config);
+
+            // Add Stats Footer
+            if (hasCmp && uffData.length > 0 && cmpData.length > 0) {
+              const stats = calculateStatistics(uffData, cmpData);
+              const footer = document.createElement("div");
+              footer.className = "stats-footer";
+              if (stats.error) footer.textContent = stats.error;
+              else {
+                const badge = stats.significant
+                  ? `<span class="stat-badge badge-sig">Sig. Diff (p<0.05)</span>`
+                  : `<span class="stat-badge badge-not-sig">Not Significant</span>`;
+                footer.innerHTML = `<div><strong>${stats.testUsed}</strong> | p: ${stats.pValT.toFixed(4)} ${badge}</div>`;
+              }
+              card.appendChild(footer);
+            }
+          }
+        });
+      }
+
+      compareSelect.onchange = e => render(e.target.value);
+      document.getElementById("applyFilter").onclick = () => render(compareSelect.value);
+      document.getElementById("refreshBtn").onclick = () => location.reload();
+      document.querySelectorAll("input[name='annMode']").forEach(r => r.onchange = e => { annotationMode = e.target.value; render(compareSelect.value); });
+      document.querySelectorAll("input[name='chartType']").forEach(r => r.onchange = e => { chartType = e.target.value; render(compareSelect.value); });
+
+      render();
+    })();
+  </script>
+</body>
+
+</html>
