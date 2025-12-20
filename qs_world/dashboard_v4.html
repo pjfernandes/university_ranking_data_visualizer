@@ -431,7 +431,16 @@
       const allColumns = [...new Set(rows.flatMap(r => Object.keys(r)))];
       const numericCols = allColumns.filter(c => !["name", "year", "location", "nid"].includes(c) && rows.some(r => isValid(parseNumber(r[c]))));
       const metrics = [...numericCols.filter(c => c !== "overall_score" && c !== "rank"), ...numericCols.filter(c => c === "overall_score")];
-      [...new Set(rows.map(r => r.name))].filter(n => n && n !== uffName).sort().forEach(n => compareSelect.add(new Option(n, n)));
+
+      // --- CORREÇÃO DE ORDENAÇÃO (Trim & localeCompare) ---
+      // 1. Extrai nomes, faz trim() para remover espaços fantasmas
+      const uniNames = [...new Set(rows.map(r => r.name ? r.name.trim() : ""))].filter(n => n && n !== uffName);
+
+      // 2. Ordena ignorando acentos/maíusculas de forma correta
+      uniNames.sort((a, b) => a.localeCompare(b, 'pt', { sensitivity: 'base' }));
+
+      uniNames.forEach(n => compareSelect.add(new Option(n, n)));
+
       const years = [...new Set(rows.map(r => r.year))].sort();
       years.forEach(y => { minYear.add(new Option(y, y)); maxYear.add(new Option(y, y)); });
       minYear.value = years[0];
@@ -494,12 +503,10 @@
             font: { family: 'Roboto, sans-serif', size: 11 },
             yaxis: yAxisConfig, xaxis: xAxisConfig,
             showlegend: true, legend: { orientation: "h", x: 0, y: 1.1 },
-            // CORREÇÃO DO FUNDO PARA BRANCO
             paper_bgcolor: "#ffffff",
             plot_bgcolor: "#ffffff"
           };
 
-          // CONFIG ALTERADA: displayModeBar: 'hover' para aparecer só ao passar o mouse
           const config = {
             responsive: true,
             displayModeBar: 'hover',
