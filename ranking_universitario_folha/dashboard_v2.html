@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RUF Analytics — UFF</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
+
+  <style>
+    :root {
+      /* Ajustado para o Azul RUF, mas mantendo o estilo do seu layout */
+      --primary-color: #004a8e;
+      --primary-light: #0066c2;
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #212529;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      padding-bottom: 40px;
+    }
+
+    /* Layout do Header igual ao seu */
+    .app-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 10px rgba(0, 74, 142, 0.2);
+    }
+
+    .app-header h1 { font-weight: 700; margin: 0; }
+    .app-header .subtitle { opacity: 0.9; font-weight: 300; font-size: 1.1rem; margin-top: 5px; }
+
+    /* Controls Card igual ao seu */
+    .controls-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .form-label { font-weight: 500; color: var(--primary-color); font-size: 0.9rem; margin-bottom: 4px; }
+    .form-select, .btn { border-radius: 8px; }
+    .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+    .btn-primary:hover { background-color: var(--primary-light); }
+
+    /* Grid Layout de 3 colunas */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media(max-width: 1200px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+    /* Estilos de Cards e Stats iguais ao seu */
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chart-header { padding: 15px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
+    .chart-title { font-weight: 700; color: var(--primary-color); font-size: 1rem; margin: 0; }
+    .chart-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+    .stats-footer { background: #fdfdfd; border-top: 1px solid #eee; padding: 10px 15px; font-size: 0.8rem; color: #555; }
+    .table-stats { font-size: 0.8rem; margin-top: 10px; }
+    .stat-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.7rem; margin-left: 5px; }
+    .badge-sig { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .badge-not-sig { background-color: #f5f5f5; color: #616161; border: 1px solid #e0e0e0; }
+    .trend-up { color: #2e7d32; font-weight: bold; }
+    .trend-down { color: #c62828; font-weight: bold; }
+    footer { margin-top: 40px; text-align: center; font-size: 13px; color: #999; }
+  </style>
+</head>
+
+<body>
+
+  <header class="app-header">
+    <div class="container-fluid px-4">
+      <h1>RUF — UFF Analytics</h1>
+      <div class="subtitle">Ranking Universitário Folha Comparison (2023–2025)</div>
+    </div>
+  </header>
+
+  <div class="container-fluid px-4">
+    <div class="controls-card">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-building"></i> Compare UFF with:</label>
+          <select id="compareSelect" class="form-select">
+            <option value="">Select an university...</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-calendar-range"></i> Period:</label>
+          <div class="input-group">
+            <select id="minYear" class="form-select"></select>
+            <span class="input-group-text bg-light text-muted">to</span>
+            <select id="maxYear" class="form-select"></select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-graph-up"></i> Visualization:</label>
+          <div class="btn-group w-100" role="group">
+            <input type="radio" class="btn-check" name="chartType" id="typeLine" value="line" checked>
+            <label class="btn btn-outline-primary" for="typeLine"><i class="bi bi-bezier2"></i> Trends</label>
+            <input type="radio" class="btn-check" name="chartType" id="typeBox" value="box">
+            <label class="btn btn-outline-primary" for="typeBox"><i class="bi bi-box-seam"></i> Distribution</label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label"><i class="bi bi-chat-left-text"></i> Data Labels:</label>
+          <div class="d-flex gap-3 mt-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annUff" value="uff" checked>
+              <label class="form-check-label" for="annUff">UFF</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annBoth" value="both">
+              <label class="form-check-label" for="annBoth">Both</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="annMode" id="annNone" value="none">
+              <label class="form-check-label" for="annNone">Off</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div id="status" class="text-primary fw-bold small">Loading datasets...</div>
+          <div>
+            <button id="refreshBtn" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+            <button id="applyFilter" class="btn btn-primary px-4"><i class="bi bi-check2-circle"></i> Update Dashboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="charts" class="grid"></div>
+
+    <footer>
+      <strong>Data Source:</strong> Ranking Universitário Folha (RUF). Developed by PGI/PLAN (UFF).
+    </footer>
+  </div>
+
+  <script>
+    (async function () {
+      const urls = [
+        { year: 2023, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2023.csv" },
+        { year: 2024, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2024.csv" },
+        { year: 2025, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/ranking_universitario_folha/2025.csv" }
+      ];
+
+      const uffName = "Universidade Federal Fluminense";
+      const chartsDiv = document.getElementById("charts");
+      const compareSelect = document.getElementById("compareSelect");
+      const minYear = document.getElementById("minYear");
+      const maxYear = document.getElementById("maxYear");
+      const statusEl = document.getElementById("status");
+
+      let annotationMode = "uff";
+      let chartType = "line";
+      let rows = [];
+
+      // Funções estatísticas IGUAIS ao seu arquivo dashboard_v2.html
+      const parseNumber = v => {
+        if (v == null) return NaN;
+        v = String(v).replace(/–/g, "-").replace(/,/g, ".");
+        const m = v.match(/-?\d+(\.\d+)?/);
+        return m ? +m[0] : NaN;
+      };
+      
+      const isValid = v => typeof v === "number" && !isNaN(v);
+      
+      // Função Pretty melhorada para evitar "PosiçãO"
+      const pretty = s => s.toLowerCase()
+        .replace(/[_\-]/g, " ")
+        .split(" ")
+        .map(w => w.length > 2 ? w.charAt(0).toUpperCase() + w.slice(1) : w)
+        .join(" ");
+
+      function calculateMannKendall(data) {
+        const n = data.length;
+        if (n < 3) return { text: "N/A", p: null, trend: "none" };
+        let S = 0;
+        for (let k = 0; k < n - 1; k++) {
+          for (let j = k + 1; j < n; j++) S += Math.sign(data[j] - data[k]);
+        }
+        const varS = (n * (n - 1) * (2 * n + 5)) / 18;
+        let Z = 0;
+        if (S > 0) Z = (S - 1) / Math.sqrt(varS);
+        else if (S < 0) Z = (S + 1) / Math.sqrt(varS);
+        const p = 2 * (1 - jStat.normal.cdf(Math.abs(Z), 0, 1));
+        let text = "Stable", trendClass = "trend-flat";
+        if (p < 0.10) {
+          if (S > 0) { text = "Increasing ↗"; trendClass = "trend-up"; }
+          else { text = "Decreasing ↘"; trendClass = "trend-down"; }
+        }
+        return { text, p, trend: trendClass };
+      }
+
+      function calculateHypothesisTest(s1, s2) {
+        if (s1.length < 3 || s2.length < 3) return { error: "N < 3" };
+        const var1 = jStat.variance(s1, true), var2 = jStat.variance(s2, true);
+        const n1 = s1.length, n2 = s2.length;
+        const mean1 = jStat.mean(s1), mean2 = jStat.mean(s2);
+        const pValF = 2 * (1 - jStat.centralF.cdf((var1 > var2 ? var1 / var2 : var2 / var1), n1 - 1, n2 - 1));
+        let pValT, testName;
+        if (pValF > 0.05) {
+          const pooledVar = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2);
+          const tStat = (mean1 - mean2) / Math.sqrt(pooledVar * (1 / n1 + 1 / n2));
+          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), n1 + n2 - 2));
+          testName = "Student's t-test";
+        } else {
+          const tStat = (mean1 - mean2) / Math.sqrt(var1 / n1 + var2 / n2);
+          const df = Math.pow(var1 / n1 + var2 / n2, 2) / ((Math.pow(var1 / n1, 2) / (n1 - 1)) + (Math.pow(var2 / n2, 2) / (n2 - 1)));
+          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), df));
+          testName = "Welch's t-test";
+        }
+        return { pValT, significant: pValT < 0.05, testUsed: testName };
+      }
+
+      // Load RUF Data
+      const texts = await Promise.all(urls.map(u => fetch(u.url).then(r => r.text())));
+      texts.forEach((txt, i) => {
+        Papa.parse(txt, { header: true, skipEmptyLines: true, delimiter: ";" }).data.forEach(r => {
+          const o = {};
+          Object.keys(r).forEach(k => o[k.trim()] = r[k]);
+          o.year = urls[i].year;
+          rows.push(o);
+        });
+      });
+
+      const nameKey = Object.keys(rows[0]).find(k => /universidade|institution|nome/i.test(k));
+      rows.forEach(r => r.name = r[nameKey]);
+
+      const numericCols = Object.keys(rows[0]).filter(c => 
+        !["name", "year", "nid", "Country", "location", nameKey].includes(c) && 
+        rows.some(r => isValid(parseNumber(r[c])))
+      );
+
+      const uniNames = [...new Set(rows.map(r => r.name))].filter(n => n && n !== uffName).sort();
+      uniNames.forEach(n => compareSelect.add(new Option(n, n)));
+
+      const years = [...new Set(rows.map(r => r.year))].sort();
+      years.forEach(y => { minYear.add(new Option(y, y)); maxYear.add(new Option(y, y)); });
+      minYear.value = years[0]; maxYear.value = years.at(-1);
+      statusEl.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Data Ready';
+
+      function render(compareTo = "") {
+        chartsDiv.innerHTML = "";
+        const hasCmp = compareTo && compareTo !== uffName;
+        const startY = parseInt(minYear.value);
+        const endY = parseInt(maxYear.value);
+        const yrRange = [];
+        for (let y = startY; y <= endY; y++) yrRange.push(y);
+
+        numericCols.forEach(metric => {
+          const uffData = [], cmpData = [], uffTime = [], cmpTime = [];
+          
+          yrRange.forEach(y => {
+            const rUff = rows.find(r => r.name === uffName && r.year === y);
+            const vUff = rUff ? parseNumber(rUff[metric]) : NaN;
+            uffTime.push({ x: y, y: isValid(vUff) ? vUff : null });
+            if (isValid(vUff)) uffData.push(vUff);
+
+            if (hasCmp) {
+              const rCmp = rows.find(r => r.name === compareTo && r.year === y);
+              const vCmp = rCmp ? parseNumber(rCmp[metric]) : NaN;
+              cmpTime.push({ x: y, y: isValid(vCmp) ? vCmp : null });
+              if (isValid(vCmp)) cmpData.push(vCmp);
+            }
+          });
+
+          const card = document.createElement("div");
+          card.className = "chart-card";
+          card.innerHTML = `<div class="chart-header"><h3 class="chart-title">${pretty(metric)}</h3></div>`;
+          const body = document.createElement("div");
+          body.className = "chart-body";
+          const plotDiv = document.createElement("div");
+          plotDiv.style.height = "280px";
+          body.appendChild(plotDiv);
+          card.appendChild(body);
+          chartsDiv.appendChild(card);
+
+          const isRank = /posi[cç][aã]o|ranking/i.test(metric);
+          const layout = {
+            margin: { t: 30, l: 40, r: 20, b: 30 },
+            showlegend: true, legend: { orientation: "h", x: 0, y: 1.15 },
+            yaxis: { autorange: isRank ? "reversed" : true, gridcolor: "#eee" },
+            xaxis: { dtick: 1, gridcolor: "#eee" }
+          };
+
+          if (chartType === "line") {
+            const traces = [{
+              x: uffTime.map(d => d.x), y: uffTime.map(d => d.y),
+              mode: "lines+markers", name: "UFF", line: { color: "#004a8e", width: 3 }
+            }];
+            if (hasCmp) traces.push({
+              x: cmpTime.map(d => d.x), y: cmpTime.map(d => d.y),
+              mode: "lines+markers", name: compareTo, line: { color: "#ff7f0e", dash: "dot" }
+            });
+
+            const anns = [];
+            const addAnn = (arr, col) => arr.forEach(d => {
+              if (d.y !== null && (annotationMode === "both" || (annotationMode === "uff" && col==="#004a8e"))) {
+                anns.push({ x: d.x, y: d.y, text: d.y.toString(), showarrow: false, yshift: 10, font: { color: col, weight: "bold", size: 10 } });
+              }
+            });
+            addAnn(uffTime, "#004a8e");
+            if (hasCmp) addAnn(cmpTime, "#e65100");
+            layout.annotations = anns;
+
+            Plotly.newPlot(plotDiv, traces, layout, { responsive: true, displaylogo: false });
+
+            // Mann-Kendall Footer
+            const mk = calculateMannKendall(uffData);
+            const footer = document.createElement("div");
+            footer.className = "stats-footer";
+            footer.innerHTML = `UFF Trend: <span class="${mk.trend}">${mk.text}</span> (p=${mk.p ? mk.p.toFixed(3) : '-'})`;
+            card.appendChild(footer);
+          } else {
+            const traces = [{ y: uffData, type: 'box', name: 'UFF', marker: { color: '#004a8e' } }];
+            if (hasCmp) traces.push({ y: cmpData, type: 'box', name: compareTo, marker: { color: '#ff7f0e' } });
+            Plotly.newPlot(plotDiv, traces, layout, { responsive: true, displaylogo: false });
+
+            if (hasCmp && uffData.length > 2 && cmpData.length > 2) {
+              const stats = calculateHypothesisTest(uffData, cmpData);
+              const footer = document.createElement("div");
+              footer.className = "stats-footer";
+              const badge = stats.significant ? `<span class="stat-badge badge-sig">Sig. Diff (p<0.05)</span>` : `<span class="stat-badge badge-not-sig">Not Significant</span>`;
+              footer.innerHTML = `<div><strong>${stats.testUsed}</strong> | p: ${stats.pValT.toFixed(4)} ${badge}</div>`;
+              card.appendChild(footer);
+            }
+          }
+        });
+      }
+
+      // --- EVENT LISTENERS IGUAIS AO ORIGINAL ---
+      compareSelect.onchange = e => render(e.target.value);
+      minYear.onchange = () => render(compareSelect.value);
+      maxYear.onchange = () => render(compareSelect.value);
+      document.getElementById("applyFilter").onclick = () => render(compareSelect.value);
+      document.getElementById("refreshBtn").onclick = () => location.reload();
+      document.querySelectorAll("input[name='annMode']").forEach(r => r.onchange = e => { annotationMode = e.target.value; render(compareSelect.value); });
+      document.querySelectorAll("input[name='chartType']").forEach(r => r.onchange = e => { chartType = e.target.value; render(compareSelect.value); });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
