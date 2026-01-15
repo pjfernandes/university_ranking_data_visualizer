@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>THE Rankings — UFF Analytics</title>
+  <title>THE Latin America — UFF Analytics</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -16,55 +14,29 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
 
   <style>
-    :root {
-      --primary-color: #b71c1c;
-      --primary-light: #e53935;
-      --bg-color: #f3f4f6;
-      --card-bg: #ffffff;
-      --text-main: #212529;
-    }
-    body { font-family: 'Roboto', sans-serif; background: var(--bg-color); color: var(--text-main); padding-bottom: 40px; }
-
-    .app-header { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; padding: 2rem 1rem; margin-bottom: 2rem; box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2); }
-    .app-header h1 { font-weight: 700; margin: 0; }
-    .app-header .subtitle { opacity: 0.9; font-weight: 300; font-size: 1.1rem; margin-top: 5px; }
-
-    .controls-card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 24px; border-left: 5px solid var(--primary-color); }
-    .form-label { font-weight: 500; color: var(--primary-color); font-size: 0.9rem; margin-bottom: 4px; }
-    .form-select, .btn { border-radius: 8px; }
-    .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
-    .btn-primary:hover { background-color: var(--primary-light); }
-    .btn-outline-primary { color: var(--primary-color); border-color: var(--primary-color); }
-    .btn-outline-primary:hover, .btn-check:checked+.btn-outline-primary { background-color: var(--primary-color); color: white; }
-
+    :root { --primary-color: #006064; --bg-color: #f3f4f6; --card-bg: #ffffff; }
+    body { font-family: 'Roboto', sans-serif; background: var(--bg-color); padding-bottom: 40px; }
+    .app-header { background: linear-gradient(135deg, var(--primary-color) 0%, #00838f 100%); color: white; padding: 2rem 1rem; margin-bottom: 2rem; }
+    .controls-card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-color); margin-bottom: 24px; }
+    .form-label { font-weight: 500; color: var(--primary-color); font-size: 0.9rem; }
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    @media(max-width:1200px){ .grid{ grid-template-columns: repeat(2,1fr); } }
-    @media(max-width:768px){ .grid{ grid-template-columns: 1fr; } .controls-card{ flex-direction:column; } }
-
-    .chart-card{ background:var(--card-bg); border-radius:12px; border:1px solid rgba(0,0,0,0.05); box-shadow:0 4px 6px rgba(0,0,0,0.03); display:flex; flex-direction:column; overflow:hidden; }
-    .chart-header{ padding:15px 20px; border-bottom:1px solid #f0f0f0; background:#fafafa; display:flex; justify-content:space-between; align-items:center; }
-    .chart-title{ font-weight:700; color:var(--primary-color); font-size:1rem; margin:0; }
-    .chart-body{ padding:10px; flex-grow:1; display:flex; flex-direction:column; }
-    .stats-footer{ background:#fdfdfd; border-top:1px solid #eee; padding:10px 15px; font-size:0.8rem; color:#555; }
-
-    .table-stats{ font-size:0.8rem; margin-top:10px; margin-bottom:0; }
-    .table-stats th{ background-color:#f8f9fa; }
-    .stat-badge{ display:inline-block; padding:2px 6px; border-radius:4px; font-weight:600; font-size:0.7rem; margin-left:5px; }
-    .badge-sig{ background-color:#e8f5e9; color:#2e7d32; border:1px solid #c8e6c9; }
-    .badge-not-sig{ background-color:#f5f5f5; color:#616161; border:1px solid #e0e0e0; }
-
-    .trend-up{ color:#2e7d32; font-weight:bold; } .trend-down{ color:#c62828; font-weight:bold; } .trend-flat{ color:#616161; }
-
-    footer{ margin-top:40px; text-align:center; font-size:13px; color:#999; }
-    footer a{ color:var(--primary-light); text-decoration:none; }
+    @media(max-width: 1200px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    .chart-card { background: var(--card-bg); border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; height: 100%; transition: all 0.3s ease; }
+    .chart-header { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
+    .chart-title { font-weight: 700; color: var(--primary-color); font-size: 0.95rem; margin: 0; }
+    .chart-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+    .stats-footer { background: #fdfdfd; border-top: 1px solid #eee; padding: 10px 15px; font-size: 0.75rem; color: #444; }
+    .table-stats { font-size: 0.72rem; margin-top: 10px; background: white; width: 100%; }
+    .trend-up { color: #2e7d32; font-weight: bold; }
+    .trend-down { color: #c62828; font-weight: bold; }
   </style>
 </head>
-
 <body>
   <header class="app-header">
     <div class="container-fluid px-4">
-      <h1>THE Rankings — UFF Analytics</h1>
-      <div class="subtitle">Comparative Analysis Dashboard (2016–2026) — metrics separated by column/year</div>
+      <h1>THE Latin America — UFF Analytics</h1>
+      <div class="subtitle">Comparative Regional Dashboard (2016–2026)</div>
     </div>
   </header>
 
@@ -74,10 +46,9 @@
         <div class="col-md-3">
           <label class="form-label"><i class="bi bi-building"></i> Compare UFF with:</label>
           <select id="compareSelect" class="form-select">
-            <option value="">Select a university...</option>
+            <option value="">Select an university...</option>
           </select>
         </div>
-
         <div class="col-md-3">
           <label class="form-label"><i class="bi bi-calendar-range"></i> Period:</label>
           <div class="input-group">
@@ -86,7 +57,6 @@
             <select id="maxYear" class="form-select"></select>
           </div>
         </div>
-
         <div class="col-md-3">
           <label class="form-label"><i class="bi bi-graph-up"></i> Visualization:</label>
           <div class="btn-group w-100" role="group">
@@ -96,13 +66,12 @@
             <label class="btn btn-outline-primary" for="typeBox"><i class="bi bi-box-seam"></i> Distribution</label>
           </div>
         </div>
-
         <div class="col-md-3">
           <label class="form-label"><i class="bi bi-chat-left-text"></i> Data Labels:</label>
           <div class="d-flex gap-3 mt-2">
             <div class="form-check">
               <input class="form-check-input" type="radio" name="annMode" id="annUff" value="uff" checked>
-              <label class="form-check-label" for="annUff">UFF only</label>
+              <label class="form-check-label" for="annUff">UFF</label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="annMode" id="annBoth" value="both">
@@ -115,7 +84,6 @@
           </div>
         </div>
       </div>
-
       <div class="row mt-3">
         <div class="col-12 d-flex justify-content-between align-items-center">
           <div id="status" class="text-primary fw-bold small">
@@ -128,369 +96,178 @@
         </div>
       </div>
     </div>
-
     <div id="charts" class="grid"></div>
-
-    <footer>
-      <strong>Data Source:</strong> Times Higher Education (THE). Developed by PGI/PLAN (UFF).
-    </footer>
   </div>
 
   <script>
-    (async function() {
-      // --- Config (2025 intentionally null -> gap) ---
-      const urls = [
-        { year: 2016, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2016.csv" },
-        { year: 2017, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2017.csv" },
-        { year: 2018, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2018.csv" },
-        { year: 2019, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2019.csv" },
-        { year: 2020, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2020.csv" },
-        { year: 2021, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2021.csv" },
-        { year: 2022, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2022.csv" },
-        { year: 2023, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2023.csv" },
-        { year: 2024, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2024.csv" },
-        { year: 2025, url: null },
-        { year: 2026, url: "https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_2026.csv" }
-      ];
+    (async function () {
+      const urls = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2026].map(y => ({
+        year: y, url: `https://raw.githubusercontent.com/pjfernandes/university_ranking_data_visualizer/refs/heads/main/times_higher_education/the_la_${y}.csv`
+      }));
 
-      // UFF aliases found across CSVs
-      const uffAliases = [
-        "universidade federal fluminense",
-        "fluminense federal university",
-        "uff",
-        "universidade federal fluminense (uff)"
-      ].map(s => s.toLowerCase());
-
-      const uffCanonical = "UFF (Fluminense Federal University)";
-
-      // DOM
-      const chartsDiv = document.getElementById("charts");
-      const compareSelect = document.getElementById("compareSelect");
-      const minYear = document.getElementById("minYear");
-      const maxYear = document.getElementById("maxYear");
-      const statusEl = document.getElementById("status");
-
-      let annotationMode = "uff";
-      let chartType = "line";
-
-      // canonical metrics (distinct)
-      const canonicalMetrics = [
-        "Rank",
-        "Overall",
-        "Teaching",
-        "Research",
-        "Research_Environment",
-        "Research_Quality",
-        "Citations",
-        "Industry_Income",
-        "Industry",
-        "International_Outlook"
-      ];
-
-      const metricLabels = {
-        Rank: "Rank (ordinal)",
-        Overall: "Overall",
-        Teaching: "Teaching",
-        Research: "Research",
-        Research_Environment: "Research Environment",
-        Research_Quality: "Research Quality",
-        Citations: "Citations",
-        Industry_Income: "Industry Income",
-        Industry: "Industry",
-        International_Outlook: "International Outlook"
-      };
-
-      // helpers
-      const normalizeKey = k => String(k||"").trim().toLowerCase();
-      const normalizeName = n => String(n||"").trim();
-      const isUFF = name => name && uffAliases.includes(String(name).toLowerCase().trim());
-      const parseNumber = v => {
-        if (v == null) return NaN;
-        let s = String(v).trim();
-        if (s === "" || s === "-" || /^na|n\/a|—$/i.test(s)) return NaN;
-        s = s.replace(/–/g,"-").replace(/=/g,"").replace(/\s+/g," ").replace(/,/g,".");
-        const m = s.match(/-?\d+(\.\d+)?/);
-        return m ? +m[0] : NaN;
-      };
-      const isValid = v => typeof v === "number" && !isNaN(v);
-
-      // Stats (Mann-Kendall, summary, hypothesis)
-      function calculateMannKendall(data) {
-        const n = data.length;
-        if (n < 4) return { text: "Insufficient Data", p: null, trend: "none" };
-        let S = 0;
-        for (let k = 0; k < n - 1; k++) for (let j = k + 1; j < n; j++) S += Math.sign(data[j] - data[k]);
-        const counts = {}; data.forEach(x => counts[x] = (counts[x] || 0) + 1);
-        let tieTerm = 0; Object.values(counts).forEach(t => { if (t > 1) tieTerm += t * (t - 1) * (2 * t + 5); });
-        const varS = (n * (n - 1) * (2 * n + 5) - tieTerm) / 18;
-        if (varS === 0) return { text: "Stable", p: 1.0, trend: "flat" };
-        let Z = 0; if (S > 0) Z = (S - 1) / Math.sqrt(varS); else if (S < 0) Z = (S + 1) / Math.sqrt(varS);
-        const p = 2 * (1 - jStat.normal.cdf(Math.abs(Z), 0, 1));
-        let text = "Stable", trendClass = "trend-flat";
-        if (p < 0.10) { if (S > 0) { text = "Increasing ↗"; trendClass = "trend-up"; } else { text = "Decreasing ↘"; trendClass = "trend-down"; } }
-        return { text, p, trend: trendClass, z: Z };
-      }
-
-      function getSummaryStats(arr) {
-        if (!arr || arr.length === 0) return null;
-        return { n: arr.length, mean: jStat.mean(arr), median: jStat.median(arr), stdev: jStat.stdev(arr, true), min: jStat.min(arr), max: jStat.max(arr) };
-      }
-
-      function calculateHypothesisTest(sample1, sample2) {
-        const s1 = sample1.filter(isValid), s2 = sample2.filter(isValid);
-        if (s1.length < 3 || s2.length < 3) return { error: "Insufficient data (n<3)" };
-        const var1 = jStat.variance(s1, true), var2 = jStat.variance(s2, true);
-        const n1 = s1.length, n2 = s2.length;
-        const mean1 = jStat.mean(s1), mean2 = jStat.mean(s2);
-        let fStat = (var1 > var2) ? var1 / var2 : var2 / var1;
-        let df1 = (var1 > var2) ? n1 - 1 : n2 - 1, df2 = (var1 > var2) ? n2 - 1 : n1 - 1;
-        const pValF = 2 * (1 - jStat.centralF.cdf(fStat, df1, df2));
-        const equalVar = pValF > 0.05;
-        let pValT, tStat, testName;
-        if (equalVar) {
-          const pooledVar = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2);
-          const se = Math.sqrt(pooledVar * (1 / n1 + 1 / n2));
-          tStat = (mean1 - mean2) / se;
-          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), n1 + n2 - 2));
-          testName = "Student's t-test";
-        } else {
-          const se = Math.sqrt(var1 / n1 + var2 / n2);
-          tStat = (mean1 - mean2) / se;
-          const df = Math.pow(var1 / n1 + var2 / n2, 2) / ((Math.pow(var1 / n1, 2) / (n1 - 1)) + (Math.pow(var2 / n2, 2) / (n2 - 1)));
-          pValT = 2 * (1 - jStat.studentt.cdf(Math.abs(tStat), df));
-          testName = "Welch's t-test";
-        }
-        return { pValT, significant: pValT < 0.05, testUsed: testName };
-      }
-
-      // --- Load & normalize CSVs robustly ---
+      const uffName = "Universidade Federal Fluminense";
       let rows = [];
-      const foundMetricsPerYear = {}; // metric -> Set(years)
+      let allFoundMetrics = new Set();
+
+      const parseVal = v => {
+        if (!v || v === "–" || v === "" || v === "null") return NaN;
+        let s = String(v).replace(/,/g, ".").trim();
+        let m = s.match(/-?\d+(\.\d+)?/);
+        return m ? parseFloat(m[0]) : NaN;
+      };
+
+      const fmt = v => (isNaN(v) || v === null) ? '-' : parseFloat(v).toFixed(1);
+
+      // Função para abreviar nomes longos (apenas para o Boxplot)
+      const abbreviate = (name) => {
+        if (!name || name.length < 15) return name;
+        const words = name.split(' ');
+        if (words.length < 2) return name;
+        return words[0] + ' ' + words.slice(1).map(w => w[0].toUpperCase() + '.').join('');
+      };
+
+      const calculateMK = (data) => {
+        const d = data.filter(v => !isNaN(v));
+        if (d.length < 4) return { text: "N/A", trend: "" };
+        let S = 0;
+        for (let i = 0; i < d.length - 1; i++) {
+          for (let j = i + 1; j < d.length; j++) S += Math.sign(d[j] - d[i]);
+        }
+        const varS = (d.length * (d.length - 1) * (2 * d.length + 5)) / 18;
+        const Z = S > 0 ? (S - 1) / Math.sqrt(varS) : (S < 0 ? (S + 1) / Math.sqrt(varS) : 0);
+        const p = 2 * (1 - jStat.normal.cdf(Math.abs(Z), 0, 1));
+        return p > 0.15 ? { text: "Stable", trend: "" } : (S > 0 ? { text: "Increasing ↗", trend: "trend-up" } : { text: "Decreasing ↘", trend: "trend-down" });
+      };
+
+      const getStats = (arr) => {
+        const d = arr.filter(v => !isNaN(v));
+        if (!d.length) return { n: 0, mean: NaN, median: NaN, stdev: NaN, min: NaN, max: NaN };
+        return { n: d.length, mean: jStat.mean(d), median: jStat.median(d), stdev: jStat.stdev(d, true), min: jStat.min(d), max: jStat.max(d) };
+      };
+
       try {
-        const texts = await Promise.all(urls.map(u => u.url ? fetch(u.url).then(r => r.text()) : Promise.resolve("")));
-        texts.forEach((txt, i) => {
-          if (!txt || txt.trim().length === 0) return;
-          let clean = txt.replace(/\r\n/g,"\n").replace(/\r/g,"\n");
-          if (!clean.includes("\n")) clean = clean.replace(/ (\d+,)/g, "\n$1");
-          clean = clean.replace(/\n+/g, "\n").trim();
-          let parsed = Papa.parse(clean, { header: true, skipEmptyLines: true, delimiter: "," });
-          if (!parsed || !parsed.data || parsed.data.length === 0) parsed = Papa.parse(clean, { header: true, skipEmptyLines: true, dynamicTyping:true });
-          if (!parsed || !parsed.data || parsed.data.length === 0) parsed = Papa.parse(clean, { header: true, skipEmptyLines: true, delimiter: "\t" });
-
-          parsed.data.forEach(rawRow => {
-            const norm = {
-              Rank: null, name: null, Country: null, Overall: NaN, Teaching: NaN,
-              Research: NaN, Research_Environment: NaN, Research_Quality: NaN,
-              Citations: NaN, Industry_Income: NaN, Industry: NaN, International_Outlook: NaN,
-              year: urls[i].year
-            };
-
-            Object.keys(rawRow).forEach(rawKey => {
-              const val = rawRow[rawKey];
-              const key = normalizeKey(rawKey);
-
-              if (/^name$|university|institution|univ|school/i.test(rawKey)) { if (!norm.name) norm.name = normalizeName(val); return; }
-              if (/country/i.test(key)) { norm.Country = normalizeName(val); return; }
-              if (/rank/i.test(key)) {
-                const r = parseNumber(val);
-                if (!isNaN(r)) { norm.Rank = r; (foundMetricsPerYear["Rank"] = foundMetricsPerYear["Rank"]||new Set()).add(urls[i].year); }
-                return;
-              }
-              if (/overall/i.test(key)) {
-                const n = parseNumber(val); if (!isNaN(n)) { norm.Overall = n; (foundMetricsPerYear["Overall"]=foundMetricsPerYear["Overall"]||new Set()).add(urls[i].year); } return;
-              }
-              if (/teaching/i.test(key)) {
-                const n = parseNumber(val); if (!isNaN(n)) { norm.Teaching = n; (foundMetricsPerYear["Teaching"]=foundMetricsPerYear["Teaching"]||new Set()).add(urls[i].year); } return;
-              }
-              if (/research quality/i.test(key)) {
-                const n = parseNumber(val); if (!isNaN(n)) { norm.Research_Quality = n; (foundMetricsPerYear["Research_Quality"]=foundMetricsPerYear["Research_Quality"]||new Set()).add(urls[i].year); } return;
-              }
-              if (/research environment/i.test(key)) {
-                const n = parseNumber(val); if (!isNaN(n)) { norm.Research_Environment = n; (foundMetricsPerYear["Research_Environment"]=foundMetricsPerYear["Research_Environment"]||new Set()).add(urls[i].year); } return;
-              }
-              if (/^research$/i.test(key) || /research score/i.test(key)) {
-                const n = parseNumber(val); if (!isNaN(n)) { norm.Research = n; (foundMetricsPerYear["Research"]=foundMetricsPerYear["Research"]||new Set()).add(urls[i].year); } return;
-              }
-              if (/citation/i.test(key)) { const n = parseNumber(val); if (!isNaN(n)) { norm.Citations = n; (foundMetricsPerYear["Citations"]=foundMetricsPerYear["Citations"]||new Set()).add(urls[i].year); } return; }
-              if (/industry income/i.test(key) || /industry_income/i.test(key)) { const n = parseNumber(val); if (!isNaN(n)) { norm.Industry_Income = n; (foundMetricsPerYear["Industry_Income"]=foundMetricsPerYear["Industry_Income"]||new Set()).add(urls[i].year); } return; }
-              if (/^industry$/i.test(key) && !/income/i.test(key)) { const n = parseNumber(val); if (!isNaN(n)) { norm.Industry = n; (foundMetricsPerYear["Industry"]=foundMetricsPerYear["Industry"]||new Set()).add(urls[i].year); } return; }
-              if (/international/i.test(key) || /outlook/i.test(key)) { const n = parseNumber(val); if (!isNaN(n)) { norm.International_Outlook = n; (foundMetricsPerYear["International_Outlook"]=foundMetricsPerYear["International_Outlook"]||new Set()).add(urls[i].year); } return; }
-
-              // fallback: exact canonical key
-              canonicalMetrics.forEach(cm => {
-                if (key === cm.toLowerCase()) {
-                  const n = parseNumber(val);
-                  if (!isNaN(n)) { norm[cm] = n; (foundMetricsPerYear[cm]=foundMetricsPerYear[cm]||new Set()).add(urls[i].year); }
+        const results = await Promise.all(urls.map(u => fetch(u.url).then(r => r.text())));
+        results.forEach((csv, i) => {
+          Papa.parse(csv, { header: true, skipEmptyLines: true }).data.forEach(r => {
+            if (r.Country && /Brazil/i.test(r.Country)) {
+              let entry = { year: urls[i].year, name: r["Name"] || r["University Name"] || r["institution"] };
+              Object.keys(r).forEach(k => {
+                let nk = k.trim();
+                if(!["Country", "Name", "University Name", "institution", "year", "name", "Location"].includes(nk)) {
+                  let val = parseVal(r[k]);
+                  if(!isNaN(val)) {
+                    entry[nk] = val;
+                    allFoundMetrics.add(nk);
+                  }
                 }
               });
-            });
-
-            if (norm.name && norm.Country && /brazil/i.test(norm.Country)) {
-              norm.name_clean = norm.name.toLowerCase().trim();
-              rows.push(norm);
+              rows.push(entry);
             }
           });
         });
 
-        if (rows.length === 0) throw new Error("No data found for Brazil");
-        statusEl.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Data Ready';
-      } catch (err) {
-        statusEl.innerHTML = '<span class="text-danger">Error loading data</span>';
-        console.error(err);
-        return;
-      }
+        const unis = [...new Set(rows.map(r => r.name))].filter(n => n && n !== uffName).sort();
+        const sel = document.getElementById("compareSelect");
+        unis.forEach(u => sel.add(new Option(u, u)));
 
-      // Metrics available and order
-      const metricsAvailable = Object.keys(foundMetricsPerYear).filter(m => foundMetricsPerYear[m] && foundMetricsPerYear[m].size > 0);
-      const metricsToRender = canonicalMetrics.filter(m => metricsAvailable.includes(m));
-
-      // Populate compare dropdown excluding UFF aliases
-      const uniSet = new Set(rows.map(r => r.name).filter(n => n && !uffAliases.includes(n.toLowerCase().trim())));
-      const uniNames = Array.from(uniSet).sort((a,b)=> a.localeCompare(b,'en',{sensitivity:'base'}));
-      uniNames.forEach(n => compareSelect.add(new Option(n, n)));
-
-      // Years for selectors (keep gap 2025)
-      const years = urls.map(u => u.year);
-      years.forEach(y => { minYear.add(new Option(y,y)); maxYear.add(new Option(y,y)); });
-      minYear.value = years[0];
-      maxYear.value = years.at(-1);
-
-      // Helper: metric years sorted
-      function getMetricYears(metric) {
-        const s = foundMetricsPerYear[metric];
-        if (!s) return [];
-        return Array.from(s).sort((a,b)=>a-b);
-      }
-
-      // Helper: build series for uniName (null => UFF via aliases) for given years
-      function buildSeriesFor(metric, uniName, yearsArray) {
-        const series = [];
-        yearsArray.forEach(y => {
-          const row = rows.find(r => r.year === y && ((uniName && r.name === uniName) || (uniName == null && uffAliases.includes((r.name_clean||"").toLowerCase()))));
-          const val = row ? row[metric] : NaN;
-          series.push(isValid(val) ? val : null);
+        const years = [...new Set(rows.map(r => r.year))].sort((a,b)=>a-b);
+        years.forEach(y => {
+          document.getElementById("minYear").add(new Option(y, y));
+          document.getElementById("maxYear").add(new Option(y, y));
         });
-        return series;
-      }
+        document.getElementById("maxYear").value = 2026;
+        document.getElementById("status").innerHTML = '<i class="bi bi-check2-circle text-success"></i> Data Ready';
 
-      // Render one chart per metric (only years where metric exists)
-      function render(compareTo = "") {
-        chartsDiv.innerHTML = "";
-        const startY = parseInt(minYear.value,10);
-        const endY = parseInt(maxYear.value,10);
+        const render = () => {
+          const chartsDiv = document.getElementById("charts"); chartsDiv.innerHTML = "";
+          const cmpName = document.getElementById("compareSelect").value;
+          const startY = parseInt(document.getElementById("minYear").value);
+          const endY = parseInt(document.getElementById("maxYear").value);
+          const chartType = document.querySelector('input[name="chartType"]:checked').value;
+          const labelsMode = document.querySelector('input[name="annMode"]:checked').value;
 
-        metricsToRender.forEach(metric => {
-          const metricYears = getMetricYears(metric).filter(y => y >= startY && y <= endY);
-          if (metricYears.length === 0) return;
+          Array.from(allFoundMetrics).sort().forEach(metric => {
+            const uffD = rows.filter(r => r.name === uffName && r.year >= startY && r.year <= endY && r.hasOwnProperty(metric));
+            const cmpD = cmpName ? rows.filter(r => r.name === cmpName && r.year >= startY && r.year <= endY && r.hasOwnProperty(metric)) : [];
+            
+            const uffY = uffD.map(r => r[metric]).filter(v => !isNaN(v));
+            const uffX = uffD.filter(r => !isNaN(r[metric])).map(r => r.year);
+            const cmpY = cmpD.map(r => r[metric]).filter(v => !isNaN(v));
+            const cmpX = cmpD.filter(r => !isNaN(r[metric])).map(r => r.year);
 
-          // Card
-          const card = document.createElement("div"); card.className = "chart-card";
-          card.innerHTML = `<div class="chart-header"><h3 class="chart-title">${metricLabels[metric] || metric}</h3></div>`;
-          const body = document.createElement("div"); body.className = "chart-body";
-          const plotDiv = document.createElement("div"); plotDiv.style.height = "300px"; body.appendChild(plotDiv); card.appendChild(body); chartsDiv.appendChild(card);
+            if (!uffY.length && !cmpY.length) return;
 
-          const uffSeries = buildSeriesFor(metric, null, metricYears);
-          const hasCmp = compareTo && compareTo.length > 0;
-          const cmpSeries = hasCmp ? buildSeriesFor(metric, compareTo, metricYears) : null;
-          const isRank = metric.toLowerCase().includes("rank");
+            const card = document.createElement("div"); card.className = "chart-card";
+            card.innerHTML = `<div class="chart-header"><h3 class="chart-title">${metric}</h3></div>`;
+            const body = document.createElement("div"); body.className = "chart-body";
+            const plotDiv = document.createElement("div"); plotDiv.style.height = "250px";
+            body.appendChild(plotDiv); card.appendChild(body); chartsDiv.appendChild(card);
 
-          const yAxisConfig = { title: metricLabels[metric] || metric, automargin: true, gridcolor: "#f0f0f0" };
-          const xAxisConfig = { title: 'Year', tickmode: 'array', tickvals: metricYears, ticktext: metricYears.map(String), automargin: true };
-          const layout = { margin:{t:30,l:60,r:20,b:40}, font:{family:'Roboto, sans-serif', size:11}, yaxis:yAxisConfig, xaxis:xAxisConfig, showlegend:true, legend:{orientation:"h", x:0, y:1.1}, paper_bgcolor:"#ffffff", plot_bgcolor:"#ffffff" };
-          const config = { responsive:true, displayModeBar:'hover', displaylogo:false, modeBarButtonsToRemove:['select2d','lasso2d'] };
+            const isRank = metric.toLowerCase() === "rank";
 
-          const traces = [{ x: metricYears, y: uffSeries, mode: "lines+markers", name: uffCanonical, line:{color:"#b71c1c", width:3}, marker:{size:7} }];
-          if (hasCmp) traces.push({ x: metricYears, y: cmpSeries, mode: "lines+markers", name: compareTo, line:{color:"#ff9800", width:3, dash:"dot"}, marker:{size:6} });
-
-          // annotations
-          const anns = [];
-          const addAnn = (arr, col) => arr.forEach((v,i)=>{ if (v !== null && v !== undefined) anns.push({ x: metricYears[i], y: v, text: (isRank ? String(v) : (Number(v).toFixed(1))), showarrow:false, yshift:12, font:{color:col,size:10,weight:"bold"}, bgcolor:"rgba(255,255,255,0.85)" }); });
-          if (annotationMode === "uff" || annotationMode === "both") addAnn(uffSeries, "#b71c1c");
-          if (annotationMode === "both" && hasCmp) addAnn(cmpSeries, "#e65100");
-          layout.annotations = anns;
-
-          Plotly.newPlot(plotDiv, traces, layout, config);
-
-          // Footer: Mann-Kendall for UFF
-          const uffValid = uffSeries.filter(isValid);
-          const mkUff = calculateMannKendall(uffValid);
-          const footer = document.createElement("div"); footer.className = "stats-footer";
-          let footerHtml = `<div><strong>${uffCanonical} Trend:</strong> <span class="${mkUff.trend}">${mkUff.text}</span> (p=${mkUff.p?mkUff.p.toFixed(3):'-'})</div>`;
-
-          // Comparator tests: only for non-Rank and only on overlapping years with valid data (paired)
-          if (hasCmp && !isRank) {
-            const pairedUFF = [];
-            const pairedCMP = [];
-            metricYears.forEach((y, idx) => {
-              const a = uffSeries[idx], b = cmpSeries[idx];
-              if (isValid(a) && isValid(b)) { pairedUFF.push(a); pairedCMP.push(b); }
-            });
-
-            if (pairedUFF.length < 3 || pairedCMP.length < 3) {
-              footerHtml += `<div><em>Comparison (t-test) not performed — at least 3 overlapping years with valid data are required.</em></div>`;
-            } else {
-              const ht = calculateHypothesisTest(pairedUFF, pairedCMP);
-              if (ht.error) footerHtml += `<div>${ht.error}</div>`;
-              else {
-                const badge = ht.significant ? `<span class="stat-badge badge-sig">Significant Difference (p<0.05)</span>` : `<span class="stat-badge badge-not-sig">Not Significant</span>`;
-                footerHtml += `<div><strong>${ht.testUsed}</strong> | p: ${ht.pValT.toFixed(4)} ${badge}</div>`;
+            if (chartType === "line") {
+              const traces = [{ x: uffX, y: uffY, name: "UFF", mode: 'lines+markers', line: { color: '#006064', width: 3 } }];
+              if (cmpName && cmpY.length) traces.push({ x: cmpX, y: cmpY, name: cmpName, mode: 'lines+markers', line: { color: '#ff9800', width: 2, dash: 'dot' } });
+              
+              const anns = [];
+              if (labelsMode !== 'none') {
+                uffY.forEach((v, i) => anns.push({ x: uffX[i], y: v, text: isRank ? v : v.toFixed(1), showarrow: false, yanchor: 'bottom', yshift: 8, font: { size: 10, weight: 'bold', color: '#006064' } }));
+                if (labelsMode === 'both') cmpY.forEach((v, i) => anns.push({ x: cmpX[i], y: v, text: isRank ? v : v.toFixed(1), showarrow: false, yanchor: 'top', yshift: -8, font: { size: 10, color: '#ff9800' } }));
               }
-            }
-          } else if (hasCmp && isRank) {
-            footerHtml += `<div><em>Rank is ordinal: t-test / boxplot are not applicable. Only Mann–Kendall for trend.</em></div>`;
-          }
 
-          footer.innerHTML = footerHtml;
-          card.appendChild(footer);
+              Plotly.newPlot(plotDiv, traces, { 
+                margin: { t: 40, l: 40, r: 20, b: 40 }, showlegend: true, legend: { orientation: "h", y: 1.25 },
+                yaxis: { autorange: isRank ? "reversed" : true, gridcolor: "#eee" }, xaxis: { dtick: 1, gridcolor: "#eee" }, 
+                annotations: anns, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'
+              }, { responsive: true, displaylogo: false });
 
-          // Boxplot mode (non-Rank only)
-          if (chartType === "box" && !isRank) {
-            const uffAll = uffSeries.filter(isValid);
-            const cmpAll = hasCmp ? cmpSeries.filter(isValid) : [];
-            if (uffAll.length === 0) {
-              const note = document.createElement("div"); note.className="stats-footer"; note.textContent = "No sufficient data for UFF boxplot in this interval.";
-              card.appendChild(note);
+              const ft = document.createElement("div"); ft.className = "stats-footer";
+              const mkU = calculateMK(uffY);
+              let h = `<div><strong>UFF Trend:</strong> <span class="${mkU.trend}">${mkU.text}</span></div>`;
+              if (cmpName && cmpY.length > 3) { const mkC = calculateMK(cmpY); h += `<div><strong>${cmpName} Trend:</strong> <span class="${mkC.trend}">${mkC.text}</span></div>`; }
+              ft.innerHTML = h; card.appendChild(ft);
             } else {
-              const boxDiv = document.createElement("div"); boxDiv.style.height = "300px"; boxDiv.style.paddingTop = "10px";
-              const boxTraces = [{ y: uffAll, type:'box', name: uffCanonical, marker:{color:'#b71c1c'}, boxpoints:'outliers' }];
-              if (hasCmp) boxTraces.push({ y: cmpAll, type:'box', name: compareTo, marker:{color:'#ff9800'}, boxpoints:'outliers' });
-              Plotly.newPlot(boxDiv, boxTraces, layout, config);
-              body.appendChild(boxDiv);
+              // No boxplot, usamos o nome abreviado para os rótulos do eixo X
+              const traces = [{ y: uffY, type: 'box', name: 'UFF', marker: { color: '#006064' } }];
+              if (cmpName && cmpY.length) traces.push({ y: cmpY, type: 'box', name: abbreviate(cmpName), marker: { color: '#ff9800' } });
+              
+              Plotly.newPlot(plotDiv, traces, { 
+                margin: { t: 40, l: 40, r: 20, b: 40 }, yaxis: { autorange: isRank ? "reversed" : true, gridcolor: "#eee" },
+                xaxis: { showgrid: false }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'
+              }, { responsive: true, displaylogo: false });
 
-              // summary table
-              const sU = getSummaryStats(uffAll);
-              const sC = hasCmp && cmpAll.length>0 ? getSummaryStats(cmpAll) : null;
-              const tableContainer = document.createElement("div"); tableContainer.style.padding = "0 10px 10px 10px";
-              const fmt = n => Number(n).toFixed(2);
-              tableContainer.innerHTML = `
+              const sU = getStats(uffY), sC = cmpName ? getStats(cmpY) : null;
+              const tableDiv = document.createElement("div");
+              tableDiv.innerHTML = `
                 <table class="table table-bordered table-sm table-stats">
-                  <thead><tr><th>Metric</th><th>${uffCanonical} (n=${sU.n})</th>${sC?`<th>${compareTo} (n=${sC.n})</th>`:''}</tr></thead>
+                  <thead>
+                    <tr><th>Metric</th><th>UFF (n=${sU.n})</th>${sC ? `<th>${abbreviate(cmpName)} (n=${sC.n})</th>` : ''}</tr>
+                  </thead>
                   <tbody>
-                    <tr><td>Mean</td><td>${fmt(sU.mean)}</td>${sC?`<td>${fmt(sC.mean)}</td>`:''}</tr>
-                    <tr><td>Median</td><td>${fmt(sU.median)}</td>${sC?`<td>${fmt(sC.median)}</td>`:''}</tr>
-                    <tr><td>Std Dev</td><td>${fmt(sU.stdev)}</td>${sC?`<td>${fmt(sC.stdev)}</td>`:''}</tr>
-                    <tr><td>Min / Max</td><td>${fmt(sU.min)} / ${fmt(sU.max)}</td>${sC?`<td>${fmt(sC.min)} / ${fmt(sC.max)}</td>`:''}</tr>
+                    <tr><td>Mean</td><td>${fmt(sU.mean)}</td>${sC ? `<td>${fmt(sC.mean)}</td>` : ''}</tr>
+                    <tr><td>Median</td><td>${fmt(sU.median)}</td>${sC ? `<td>${fmt(sC.median)}</td>` : ''}</tr>
+                    <tr><td>Std Dev</td><td>${fmt(sU.stdev)}</td>${sC ? `<td>${fmt(sC.stdev)}</td>` : ''}</tr>
+                    <tr><td>Min / Max</td><td>${fmt(sU.min)} / ${fmt(sU.max)}</td>${sC ? `<td>${fmt(sC.min)} / ${fmt(sC.max)}</td>` : ''}</tr>
                   </tbody>
                 </table>`;
-              body.appendChild(tableContainer);
+              body.appendChild(tableDiv);
             }
-          }
+          });
+        };
 
-        }); // end metrics loop
-      } // end render
-
-      // Events
-      compareSelect.onchange = e => render(e.target.value);
-      minYear.onchange = () => render(compareSelect.value);
-      maxYear.onchange = () => render(compareSelect.value);
-      document.getElementById("applyFilter").onclick = () => render(compareSelect.value);
-      document.getElementById("refreshBtn").onclick = () => location.reload();
-      document.querySelectorAll("input[name='annMode']").forEach(r => r.onchange = e => { annotationMode = e.target.value; render(compareSelect.value); });
-      document.querySelectorAll("input[name='chartType']").forEach(r => r.onchange = e => { chartType = e.target.value; render(compareSelect.value); });
-
-      // initial render
-      render();
-
+        // Reativação dos Event Listeners para atualização automática
+        document.getElementById("compareSelect").addEventListener("change", render);
+        document.getElementById("minYear").addEventListener("change", render);
+        document.getElementById("maxYear").addEventListener("change", render);
+        document.querySelectorAll('input[name="chartType"]').forEach(el => el.addEventListener("change", render));
+        document.querySelectorAll('input[name="annMode"]').forEach(el => el.addEventListener("change", render));
+        
+        // Botões manuais mantidos
+        document.getElementById("applyFilter").onclick = render;
+        document.getElementById("refreshBtn").onclick = () => location.reload();
+        
+        render();
+      } catch (e) { console.error(e); }
     })();
   </script>
 </body>
