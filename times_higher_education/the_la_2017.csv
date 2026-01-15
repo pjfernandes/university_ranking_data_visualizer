@@ -1,33 +1,33 @@
 Rank,Name,Country,Overall,Teaching,Research,Citations,Industry Income,International_Outlook
-1,University of Campinas,Brazil,87.9,94.2,98.5,73.7,67,54.4
-2,University of São Paulo,Brazil,87.5,94,100,70.5,50.2,57.5
-7,Universidade Federal de São Paulo (UNIFESP),Brazil,76.7,88.1,78.3,72,40.3,39.3
-8,Federal University of Rio de Janeiro,Brazil,74.6,87.7,76.2,61.1,55.9,46.2
-9,Pontifical Catholic University of Rio de Janeiro (PUC-Rio),Brazil,74.1,72,82.1,62,100,70.9
-11,Federal University of Minas Gerais,Brazil,73.1,79.8,77.9,70,40.9,38.2
-12,Universidade Estadual Paulista (Unesp),Brazil,71.8,86,87.7,34.8,38,41.7
-14,Universidade Federal do ABC (UFABC),Brazil,63.7,65.5,55.8,80.2,41.3,54.6
+1,Universidade Estadual de Campinas,Brazil,87.9,94.2,98.5,73.7,67,54.4
+2,Universidade de São Paulo,Brazil,87.5,94,100,70.5,50.2,57.5
+7,Universidade Federal de São Paulo,Brazil,76.7,88.1,78.3,72,40.3,39.3
+8,Universidade Federal do Rio de Janeiro,Brazil,74.6,87.7,76.2,61.1,55.9,46.2
+9,Pontifícia Universidade Católica do Rio de Janeiro,Brazil,74.1,72,82.1,62,100,70.9
+11,Universidade Federal de Minas Gerais,Brazil,73.1,79.8,77.9,70,40.9,38.2
+12,Universidade Estadual Paulista,Brazil,71.8,86,87.7,34.8,38,41.7
+14,Universidade Federal do ABC,Brazil,63.7,65.5,55.8,80.2,41.3,54.6
 15,Universidade Federal de Santa Catarina,Brazil,62.7,70.5,61.4,61.1,51,39.9
-16,Pontifical Catholic University of Rio Grande do Sul (PUCRS),Brazil,62.3,58,66.7,74.5,66.8,28.6
-18,Federal University of São Carlos,Brazil,59.4,68.2,66,45.2,36.1,33
-19,University of Brasília,Brazil,59.3,61.5,68.8,43.2,34.8,56.8
-24,Universidade do Estado do Rio de Janeiro (UERJ),Brazil,55.9,62.6,55.2,56.4,55.7,25.3
+16,Pontifícia Universidade Católica do Rio Grande do Sul,Brazil,62.3,58,66.7,74.5,66.8,28.6
+18,Universidade Federal de São Carlos,Brazil,59.4,68.2,66,45.2,36.1,33
+19,Universidade de Brasília,Brazil,59.3,61.5,68.8,43.2,34.8,56.8
+24,Universidade do Estado do Rio de Janeiro,Brazil,55.9,62.6,55.2,56.4,55.7,25.3
 26–30,Universidade Federal de Pernambuco,Brazil,53.1–54.9,67.3,51.1,41.6,70.1,24.6
-31–35,Federal University of Viçosa,Brazil,49.6–51.6,70.4,48.2,25.3,76.4,36.6
-36–40,Universidade Federal do Ceará (UFC),Brazil,46.7–49.5,55,40.3,53.9,37.9,26.3
+31–35,Universidade Federal de Viçosa,Brazil,49.6–51.6,70.4,48.2,25.3,76.4,36.6
+36–40,Universidade Federal do Ceará,Brazil,46.7–49.5,55,40.3,53.9,37.9,26.3
 41–45,Pontifícia Universidade Católica do Paraná,Brazil,44.7–46.5,40.6,41.4,68.8,41.4,26.5
-41–45,Fluminense Federal University,Brazil,44.7–46.5,42.2,56.8,32.5,35.3,37.3
-51–60,Londrina State University,Brazil,38.9–42.3,68.1,27.3,30.7,35,20.1
-51–60,Federal University of Pelotas,Brazil,38.9–42.3,36,38.9,68.1,17.7,26
-51–60,Federal University of Rio Grande do Norte (UFRN),Brazil,38.9–42.3,47.7,40,39,59.6,24.8
-51–60,Federal University of Lavras,Brazil,38.9–42.3,53.2,45.1,20.4,39.6,24.8
-51–60,Universidade Federal do Paraná (UFPR),Brazil,38.9–42.3,47.5,44.2,31,34.8,29.5
-51–60,Federal University of Goiás,Brazil,38.9–42.3,38.1,44.7,47.8,34.8,21.8
-61–70,Unisinos University,Brazil,30.9–38.3,39.4,49.7,12.1,38.3,27
-61–70,Universidade Federal de Ouro Preto (UFOP),Brazil,30.9–38.3,39,26.4,45.9,36.4,23.5
+41–45,Universidade Federal Fluminense,Brazil,44.7–46.5,42.2,56.8,32.5,35.3,37.3
+51–60,Universidade Estadual de Londrina,Brazil,38.9–42.3,68.1,27.3,30.7,35,20.1
+51–60,Universidade Federal de Pelotas,Brazil,38.9–42.3,36,38.9,68.1,17.7,26
+51–60,Universidade Federal do Rio Grande do Norte,Brazil,38.9–42.3,47.7,40,39,59.6,24.8
+51–60,Universidade Federal de Lavras,Brazil,38.9–42.3,53.2,45.1,20.4,39.6,24.8
+51–60,Universidade Federal do Paraná,Brazil,38.9–42.3,47.5,44.2,31,34.8,29.5
+51–60,Universidade Federal de Goiás,Brazil,38.9–42.3,38.1,44.7,47.8,34.8,21.8
+61–70,Universidade do Vale do Rio dos Sinos,Brazil,30.9–38.3,39.4,49.7,12.1,38.3,27
+61–70,Universidade Federal de Ouro Preto,Brazil,30.9–38.3,39,26.4,45.9,36.4,23.5
 61–70,Universidade Estadual de Maringá,Brazil,30.9–38.3,37.5,41.5,20.5,35.4,19.9
-61–70,State University of Ponta Grossa,Brazil,30.9–38.3,31.3,37.1,38.7,34.8,19.1
-61–70,Mackenzie Presbyterian University,Brazil,30.9–38.3,36.8,29.4,22.4,34.8,30.3
-71+,Universidade Nove de Julho (Uninove),Brazil,18.1–26.8,24.4,19,38,35.6,23
-71+,State University of Bahia,Brazil,18.1–26.8,26.3,19.5,9.9,10.3,16.6
-71+,University of Vale do Itajaí,Brazil,18.1–26.8,25.3,19.1,9.9,11.7,20.8
+61–70,Universidade Estadual de Ponta Grossa,Brazil,30.9–38.3,31.3,37.1,38.7,34.8,19.1
+61–70,Universidade Presbiteriana Mackenzie,Brazil,30.9–38.3,36.8,29.4,22.4,34.8,30.3
+71+,Universidade Nove de Julho,Brazil,18.1–26.8,24.4,19,38,35.6,23
+71+,Universidade Estadual da Bahia,Brazil,18.1–26.8,26.3,19.5,9.9,10.3,16.6
+71+,Universidade do Vale do Itajaí,Brazil,18.1–26.8,25.3,19.1,9.9,11.7,20.8
