@@ -1,41 +1,42 @@
 # 📊 University Ranking Data Visualizer
 
-This repository contains interactive dashboards for visualizing and comparing university rankings using data from **QS**, **THE**, and **RUF**.
-All dashboards are generated client-side and automatically updated from the CSV files stored in the repository.
-
----
+This repository contains interactive dashboards for visualizing and comparing university rankings using data from **QS**, **THE**, and **RUF**. All dashboards are generated client-side and automatically updated from the CSV files stored in the repository.
 
 ## 🚀 Available Dashboards
 
-### 🌱 QS Sustainability
-🔗 https://pjfernandes.github.io/university_ranking_data_visualizer/qs_sustainability/dashboard.html
-
 ### 🌍 QS World University Rankings
-🔗 https://pjfernandes.github.io/university_ranking_data_visualizer/qs_world/dashboard.html
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/qs_world/)
 
-### 🇧🇷 Ranking Universitário Folha (RUF)
-🔗 https://pjfernandes.github.io/university_ranking_data_visualizer/ranking_universitario_folha/dashboard.html
+### 🌱 QS Sustainability
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/qs_sustainability/)
+
+### 🌎 QS Latin America
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/qs_latin_america/)
 
 ### 🎓 Times Higher Education (THE)
-🔗 https://pjfernandes.github.io/university_ranking_data_visualizer/times_higher_education/dashboard.html
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/times_higher_education/)
+
+### 🌎 Times Higher Education (THE) Latin America
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/times_higher_education_latin_america/)
+
+### 🇧🇷 Ranking Universitário Folha (RUF)
+🔗 [Open Dashboard](https://pjfernandes.github.io/university_ranking_data_visualizer/ranking_universitario_folha/)
 
 ---
 
 ## 📁 Repository Structure
 
-- 📂 **qs_sustainability/** — Dashboard + QS Sustainability datasets
-- 📂 **qs_world/** — Dashboard + QS World datasets
-- 📂 **ranking_universitario_folha/** — Dashboard + RUF datasets
-- 📂 **times_higher_education/** — Dashboard + THE datasets
-
----
+* 📂 `qs_world/` — Dashboard + QS World datasets
+* 📂 `qs_sustainability/` — Dashboard + QS Sustainability datasets
+* 📂 `qs_latin_america/` — Dashboard + QS Latin America datasets
+* 📂 `times_higher_education/` — Dashboard + THE datasets
+* 📂 `times_higher_education_latin_america/` — Dashboard + THE Latin America datasets
+* 📂 `ranking_universitario_folha/` — Dashboard + RUF datasets
 
 ## 🛠️ Technologies Used
 
-- 🧩 **HTML + CSS + Bootstrap**
-- ⚙️ **JavaScript**
-- 📊 **Plotly.js** (interactive charts)
-- 📄 **PapaParse** (CSV parsing)
-- 🌐 **GitHub Pages** (hosting)
-
----
+* 🧩 **HTML + CSS + Bootstrap**
+* ⚙️ **JavaScript**
+* 📊 **Plotly.js** (interactive charts)
+* 📄 **PapaParse** (CSV parsing)
+* 🌐 **GitHub Pages** (hosting)
